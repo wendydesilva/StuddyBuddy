@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Coach Home</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <style>
+        .menu-buttons a {
+            margin: 8px 8px 8px 0;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+    </style>
+</head>
+
+<body class="container" style="position: relative;">
+
+<a href="/logout" class="btn btn-default logout-btn">Logout</a>
+
+<h2>Welcome, <span th:text="${user.name}"></span>!</h2>
+<hr>
+
+<div class="menu-buttons">
+    <a th:href="@{/coach/goals/requests}" class="btn btn-primary">Goal Requests</a>
+    <a th:href="@{/coach/goals/assigned}" class="btn btn-info">Assigned Goals</a>
+    <a th:href="@{/coach/notifications}" class="btn btn-warning">Notifications</a>
+</div>
+
+</body>
+</html>

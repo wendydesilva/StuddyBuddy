@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Tasks</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<body class="container">
+
+<h2>My Tasks</h2>
+<a href="/student/home" class="btn btn-default">← Home</a>
+<a href="/logout" class="btn btn-default pull-right">Logout</a>
+<hr>
+
+<p class="text-success" th:if="${successMessage}" th:text="${successMessage}"></p>
+<p class="text-danger" th:if="${errorMessage}" th:text="${errorMessage}"></p>
+
+<div th:if="${#lists.isEmpty(tasks)}" class="text-muted">
+    <p>No tasks assigned yet.</p>
+</div>
+
+<div th:each="task : ${tasks}" class="panel panel-default">
+    <div class="panel-heading">
+        <strong th:text="${task.title}"></strong>
+        <span class="pull-right">
+            <span class="label label-warning" th:if="${task.status.name() == 'ASSIGNED'}">Assigned</span>
+            <span class="label label-info" th:if="${task.status.name() == 'SUBMITTED'}">Submitted</span>
+            <span class="label label-success" th:if="${task.status.name() == 'COMPLETED'}">Completed</span>
+            <span class="label label-danger" th:if="${task.status.name() == 'REJECTED'}">Rejected</span>
+        </span>
+    </div>
+    <div class="panel-body">
+        <p th:text="${task.description}"></p>
+        <p><strong>Goal:</strong> <span th:text="${task.goal.title}"></span></p>
+        <p><strong>Due Date:</strong> <span th:text="${task.dueDate}"></span></p>
+
+        <form method="POST" action="/student/tasks/submit"
+              th:if="${task.status.name() == 'ASSIGNED' or task.status.name() == 'REJECTED'}">
+            <input type="hidden" name="taskId" th:value="${task.taskId}">
+            <div class="form-group">
+                <label>Submission Note</label>
+                <textarea name="submissionNote" class="form-control"
+                          rows="2" placeholder="Describe what you did..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">Submit Task</button>
+        </form>
+
+        <div th:if="${task.status.name() == 'SUBMITTED' or task.status.name() == 'COMPLETED'}">
+            <p><strong>Your submission:</strong>
+                <span th:text="${task.submissionNote}"></span>
+            </p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

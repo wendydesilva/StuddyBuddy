@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Goals</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<body class="container">
+
+<h2>My Goals</h2>
+<a href="/student/home" class="btn btn-default">← Home</a>
+<a href="/logout" class="btn btn-default pull-right">Logout</a>
+<hr>
+
+<!-- CREATE GOAL -->
+<div class="panel panel-primary">
+    <div class="panel-heading">Create New Goal</div>
+    <div class="panel-body">
+
+        <form th:action="@{/student/goals/create}" th:object="${goal}" method="post">
+
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" th:field="*{title}" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea th:field="*{description}" class="form-control" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Target Date</label>
+                <input type="date" th:field="*{targetDate}" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label>Attach Coach</label>
+                <select name="coachId" class="form-control">
+                    <option value="">-- Optional --</option>
+                    <option th:each="coach : ${coaches}"
+                            th:value="${coach.userId}"
+                            th:text="${coach.name}">
+                    </option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create Goal</button>
+        </form>
+
+    </div>
+</div>
+
+<!-- GOALS TABLE -->
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Coach</th>
+        <th>Tasks</th>
+        <th style="width: 35%;">Progress</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    <tr th:each="goal : ${goals}">
+        <td th:text="${goal.title}"></td>
+
+        <td>
+            <span class="label label-warning"
+                  th:if="${goal.status.name() == 'PENDING'}">Pending</span>
+
+            <span class="label label-info"
+                  th:if="${goal.status.name() == 'ACTIVE'}">Active</span>
+
+            <span class="label label-success"
+                  th:if="${goal.status.name() == 'COMPLETED'}">Completed</span>
+
+            <span class="label label-danger"
+                  th:if="${goal.status.name() == 'REJECTED'}">Rejected</span>
+        </td>
+
+        <td th:text="${goal.coach != null ? goal.coach.name : 'Not Assigned'}"></td>
+
+        <td th:text="${goal.completedTasks + ' / ' + goal.totalTasks}"></td>
+
+        <td>
+            <div class="progress" style="margin-bottom: 5px;">
+
+                <div class="progress-bar"
+                     role="progressbar"
+
+                     th:classappend="
+                        ${goal.status.name() == 'PENDING'} ? ' progress-bar-warning' :
+                        (${goal.status.name() == 'ACTIVE'} ? ' progress-bar-info' :
+                        (${goal.status.name() == 'COMPLETED'} ? ' progress-bar-success' :
+                        ' progress-bar-danger'))
+                     "
+
+                     th:style="'width:' + ${goal.progress} + '%;'"
+                     th:attr="aria-valuenow=${goal.progress}, aria-valuemin=0, aria-valuemax=100"
+                     th:text="${goal.progress} + '%'">
+                </div>
+
+            </div>
+        </td>
+    </tr>
+
+    <tr th:if="${#lists.isEmpty(goals)}">
+        <td colspan="5" class="text-center text-muted">
+            No goals yet. Create one above.
+        </td>
+    </tr>
+
+    </tbody>
+</table>
+
+</body>
+</html>

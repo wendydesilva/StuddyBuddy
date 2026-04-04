@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Prizes</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<body class="container">
+
+<h2>My Prizes</h2>
+<a href="/student/home" class="btn btn-default">← Home</a>
+<a href="/logout" class="btn btn-default pull-right">Logout</a>
+<hr>
+
+<p class="text-success" th:if="${successMessage}" th:text="${successMessage}"></p>
+<p class="text-danger" th:if="${errorMessage}" th:text="${errorMessage}"></p>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="alert alert-success">
+            <h4>Total Earned: <strong th:text="${totalEarned} + ' pts'"></strong></h4>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="alert alert-info">
+            <h4>Available Points: <strong th:text="${availablePoints} + ' pts'"></strong></h4>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-success">
+    <div class="panel-heading"><strong>Request a Prize</strong></div>
+    <div class="panel-body">
+        <form method="POST" action="/student/prizes/request">
+            <div class="form-group">
+                <label>Select Prize Tier</label>
+                <select name="prizeName" class="form-control" required onchange="updatePrizeDetails(this)">
+                    <option value="">-- Select Prize --</option>
+                    <option th:each="tier : ${prizeTiers}"
+                            th:value="${tier.name()}"
+                            th:text="${tier.name() + ' (' + tier.pointsRequired() + ' pts)'}"
+                            th:attr="data-desc=${tier.description()},data-points=${tier.pointsRequired()}">
+                    </option>
+                </select>
+            </div>
+            <input type="hidden" name="description" id="prizeDesc">
+            <input type="hidden" name="pointsRequired" id="prizePoints">
+            <button type="submit" class="btn btn-success">Request Prize</button>
+        </form>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>Prize Tiers</strong></div>
+    <div class="panel-body">
+        <table class="table table-bordered">
+            <thead>
+            <tr><th>Prize</th><th>Description</th><th>Points Required</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="tier : ${prizeTiers}">
+                <td th:text="${tier.name()}"></td>
+                <td th:text="${tier.description()}"></td>
+                <td th:text="${tier.pointsRequired()} + ' pts'"></td>
+                <td>
+                    <span class="label label-success" th:if="${availablePoints >= tier.pointsRequired()}">Eligible ✓</span>
+                    <span class="label label-default" th:if="${availablePoints < tier.pointsRequired()}"
+                          th:text="${tier.pointsRequired() - availablePoints} + ' pts to go'"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<h3>My Prize Requests</h3>
+<div th:if="${#lists.isEmpty(prizes)}" class="text-muted">
+    <p>No prize requests yet.</p>
+</div>
+
+<div th:each="prize : ${prizes}" class="panel"
+     th:classappend="${prize.status.name() == 'APPROVED'} ? 'panel-success' :
+                     (${prize.status.name() == 'REJECTED'} ? 'panel-danger' : 'panel-warning')">
+    <div class="panel-heading">
+        <strong th:text="${prize.prizeName}"></strong>
+        <span class="pull-right" th:text="${prize.requestedDate}"></span>
+    </div>
+    <div class="panel-body">
+        <p th:text="${prize.description}"></p>
+        <p><strong>Points:</strong> <span th:text="${prize.pointsRequired} + ' pts'"></span></p>
+        <span class="label label-warning" th:if="${prize.status.name() == 'PENDING'}">Pending Admin Approval</span>
+        <span class="label label-success" th:if="${prize.status.name() == 'APPROVED'}">Approved ✓</span>
+        <span class="label label-danger" th:if="${prize.status.name() == 'REJECTED'}">Rejected</span>
+
+        <p th:if="${prize.adminNote != null and !#strings.isEmpty(prize.adminNote)}"
+           th:text="'Note: ' + ${prize.adminNote}" class="text-muted"></p>
+    </div>
+</div>
+
+<script>
+    function updatePrizeDetails(select) {
+        const opt = select.options[select.selectedIndex];
+        document.getElementById('prizeDesc').value = opt.getAttribute('data-desc') || '';
+        document.getElementById('prizePoints').value = opt.getAttribute('data-points') || '';
+    }
+</script>
+</body>
+</html>

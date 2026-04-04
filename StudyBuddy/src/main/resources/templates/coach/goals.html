@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle}">Coach Goals</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<body class="container">
+
+<h2 th:text="${pageTitle}">Coach Goals</h2>
+<a href="/coach/home" class="btn btn-default">← Home</a>
+<a href="/logout" class="btn btn-default pull-right">Logout</a>
+<hr>
+
+<p th:if="${#lists.isEmpty(goals)}" class="text-muted">No goals found.</p>
+
+<div th:each="goal : ${goals}" class="panel panel-default">
+    <div class="panel-heading">
+        <strong th:text="${goal.student.name}"></strong> —
+        <span th:text="${goal.title}"></span>
+
+        <span class="pull-right">
+            <span class="label label-warning"
+                  th:if="${goal.status.name() == 'PENDING'}">Pending</span>
+            <span class="label label-success"
+                  th:if="${goal.status.name() == 'ACTIVE'}">Active</span>
+            <span class="label label-primary"
+                  th:if="${goal.status.name() == 'COMPLETED'}">Completed</span>
+            <span class="label label-danger"
+                  th:if="${goal.status.name() == 'REJECTED'}">Rejected</span>
+        </span>
+    </div>
+
+    <div class="panel-body">
+        <p th:text="${goal.description}"></p>
+        <p><strong>Target Date:</strong> <span th:text="${goal.targetDate}"></span></p>
+        <p><strong>Progress:</strong> <span th:text="${goal.progress} + '%'"></span></p>
+
+        <div th:if="${showApprovalButtons}">
+            <form method="POST" action="/coach/goals/approve" style="display:inline">
+                <input type="hidden" name="goalId" th:value="${goal.goalId}">
+                <button class="btn btn-success btn-sm"
+                        th:if="${goal.status.name() == 'PENDING'}">Approve</button>
+            </form>
+
+            <form method="POST" action="/coach/goals/reject" style="display:inline">
+                <input type="hidden" name="goalId" th:value="${goal.goalId}">
+                <button class="btn btn-danger btn-sm"
+                        th:if="${goal.status.name() == 'PENDING'}">Reject</button>
+            </form>
+        </div>
+
+        <a th:href="@{/coach/goals/{id}/tasks(id=${goal.goalId})}"
+           class="btn btn-warning btn-sm">View / Assign Tasks</a>
+    </div>
+</div>
+
+</body>
+</html>

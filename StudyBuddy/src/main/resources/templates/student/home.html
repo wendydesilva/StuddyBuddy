@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Home</title>
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <style>
+        .menu-buttons a {
+            margin: 8px 8px 8px 0;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+    </style>
+</head>
+
+<body class="container" style="position: relative;">
+
+<!-- LOGOUT TOP RIGHT -->
+<a href="/logout" class="btn btn-default logout-btn">Logout</a>
+
+<h2>Welcome, <span th:text="${user.name}"></span>!</h2>
+
+<hr>
+
+<!-- MAIN OPTIONS -->
+<div class="menu-buttons">
+    <a href="/student/goals" class="btn btn-primary">View Goals</a>
+    <a href="/student/tasks" class="btn btn-info">My Tasks</a>
+    <a href="/student/rewards" class="btn btn-warning">View Rewards</a>
+    <a href="/student/prizes" class="btn btn-success">My Prizes</a>
+    <a href="/student/notifications" class="btn btn-danger">Notifications</a>
+</div>
+
+</body>
+</html>

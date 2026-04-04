@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Rewards</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<body class="container">
+
+<h2>My Rewards</h2>
+<a href="/student/home" class="btn btn-default">← Home</a>
+<a href="/logout" class="btn btn-default pull-right">Logout</a>
+<hr>
+
+<p><strong>Total Points:</strong> <span th:text="${totalPoints}"></span></p>
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Goal</th>
+        <th>Task</th>
+        <th>Points</th>
+        <th>Coach</th>
+        <th>Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="reward : ${rewards}">
+        <td th:text="${reward.goal.title}"></td>
+        <td th:text="${reward.task.title}"></td>
+        <td th:text="${reward.pointsAwarded}"></td>
+        <td th:text="${reward.assignedBy.name}"></td>
+        <td th:text="${reward.dateAwarded}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Prize Management</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<body class="container">
+
+<h2>Prize Management</h2>
+<a href="/admin/home" class="btn btn-default">← Home</a>
+<a href="/logout" class="btn btn-default pull-right">Logout</a>
+<hr>
+
+<p class="text-success" th:if="${successMessage}" th:text="${successMessage}"></p>
+<p class="text-danger" th:if="${errorMessage}" th:text="${errorMessage}"></p>
+
+<h3>Pending Prize Requests</h3>
+<div th:if="${#lists.isEmpty(pendingPrizes)}" class="text-muted">
+    <p>No pending prize requests.</p>
+</div>
+
+<div th:each="prize : ${pendingPrizes}" class="panel panel-warning">
+    <div class="panel-heading">
+        <strong th:text="${prize.student.name}"></strong> requested
+        <strong th:text="${prize.prizeName}"></strong>
+        <span class="pull-right" th:text="${prize.requestedDate}"></span>
+    </div>
+    <div class="panel-body">
+        <p th:text="${prize.description}"></p>
+        <p><strong>Points Required:</strong>
+            <span th:text="${prize.pointsRequired} + ' pts'"></span>
+        </p>
+
+        <form method="POST" action="/admin/prizes/approve" style="display:inline">
+            <input type="hidden" name="prizeId" th:value="${prize.prizeId}">
+            <button class="btn btn-success btn-sm">
+                Approve
+            </button>
+        </form>
+
+        <form method="POST" action="/admin/prizes/reject" style="display:inline">
+            <input type="hidden" name="prizeId" th:value="${prize.prizeId}">
+            <input type="text" name="adminNote" placeholder="Reason (optional)"
+                   class="form-control input-sm" style="width:200px; display:inline">
+            <button class="btn btn-danger btn-sm">Reject</button>
+        </form>
+    </div>
+</div>
+
+<h3>All Prize Requests History</h3>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Student</th>
+        <th>Prize</th>
+        <th>Points</th>
+        <th>Requested</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="prize : ${allPrizes}">
+        <td th:text="${prize.student.name}"></td>
+        <td th:text="${prize.prizeName}"></td>
+        <td th:text="${prize.pointsRequired} + ' pts'"></td>
+        <td th:text="${prize.requestedDate}"></td>
+        <td>
+            <span class="label label-warning" th:if="${prize.status.name() == 'PENDING'}">Pending</span>
+            <span class="label label-success" th:if="${prize.status.name() == 'APPROVED'}">Approved</span>
+            <span class="label label-danger" th:if="${prize.status.name() == 'REJECTED'}">Rejected</span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

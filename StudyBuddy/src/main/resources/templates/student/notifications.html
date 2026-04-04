@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Notifications</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<body class="container">
+
+<h2>My Notifications</h2>
+<a href="/student/home" class="btn btn-default">← Home</a>
+<a href="/logout" class="btn btn-default pull-right">Logout</a>
+<hr>
+
+<div th:if="${#lists.isEmpty(notifications)}" class="text-muted">
+    <p>No notifications yet.</p>
+</div>
+
+<div th:each="notification : ${notifications}" class="panel panel-info">
+    <div class="panel-body">
+        <p th:text="${notification.message}"></p>
+        <small class="text-muted" th:text="${notification.createdDate}"></small>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Goal Tasks</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<body class="container">
+
+<h2>Tasks for Goal: <span th:text="${goal.title}"></span></h2>
+<a href="/coach/goals/requests" class="btn btn-default">← Back to Goals</a>
+<a href="/logout" class="btn btn-default pull-right">Logout</a>
+<hr>
+
+<p class="text-success" th:if="${successMessage}" th:text="${successMessage}"></p>
+<p class="text-danger" th:if="${errorMessage}" th:text="${errorMessage}"></p>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">Assign New Task</div>
+    <div class="panel-body">
+        <form method="POST" th:action="@{/coach/goals/{id}/tasks/assign(id=${goal.goalId})}">
+            <div class="form-group">
+                <label>Task Title</label>
+                <input type="text" name="title" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="description" class="form-control" rows="2" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Due Date</label>
+                <input type="date" name="dueDate" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-success">Assign Task</button>
+        </form>
+    </div>
+</div>
+
+<div th:if="${#lists.isEmpty(tasks)}" class="text-muted">
+    <p>No tasks assigned yet for this goal.</p>
+</div>
+
+<div th:each="task : ${tasks}" class="panel panel-default">
+    <div class="panel-heading">
+        <strong th:text="${task.title}"></strong> —
+        <span th:text="${task.student.name}"></span>
+        <span class="pull-right">
+            <span class="label label-warning" th:if="${task.status.name() == 'ASSIGNED'}">Assigned</span>
+            <span class="label label-info" th:if="${task.status.name() == 'SUBMITTED'}">Submitted</span>
+            <span class="label label-success" th:if="${task.status.name() == 'COMPLETED'}">Completed</span>
+            <span class="label label-danger" th:if="${task.status.name() == 'REJECTED'}">Rejected</span>
+        </span>
+    </div>
+    <div class="panel-body">
+        <p th:text="${task.description}"></p>
+        <p><strong>Due:</strong> <span th:text="${task.dueDate}"></span></p>
+
+        <div th:if="${task.submissionNote != null and !#strings.isEmpty(task.submissionNote)}"
+             class="alert alert-info">
+            <strong>Student submission:</strong>
+            <span th:text="${task.submissionNote}"></span>
+        </div>
+
+        <form method="POST" action="/coach/tasks/complete"
+              th:if="${task.status.name() == 'SUBMITTED'}"
+              style="display:inline">
+            <input type="hidden" name="taskId" th:value="${task.taskId}">
+            <input type="number" name="points" placeholder="Points"
+                   min="1" max="100" class="form-control input-sm"
+                   style="width:100px; display:inline" required>
+            <button class="btn btn-success btn-sm">Mark Complete + Award Points</button>
+        </form>
+
+        <form method="POST" action="/coach/tasks/reject"
+              th:if="${task.status.name() == 'SUBMITTED'}"
+              style="display:inline">
+            <input type="hidden" name="taskId" th:value="${task.taskId}">
+            <button class="btn btn-danger btn-sm">Reject</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

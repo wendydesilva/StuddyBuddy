@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Check-Ins</title>
+  <style>
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 0;
+    }
+
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    h2, h3 {
+      color: #1e293b;
+    }
+
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    input[type="text"],
+    textarea,
+    input[type="file"] {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      width: 100%;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    button {
+      width: 120px;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      background-color: #3b82f6;
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #2563eb;
+    }
+
+
+    .checkin-card {
+      background-color: #f9fafb;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .checkin-card p {
+      margin: 5px 0;
+    }
+
+    .checkin-card small {
+      color: #6b7280;
+    }
+
+    .file-link {
+      display: inline-block;
+      margin: 5px 0;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .file-link:hover {
+      text-decoration: underline;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .actions form {
+      display: inline;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #e5e7eb;
+      margin: 20px 0;
+    }
+    .top-menu {
+      margin-left: 240px;
+      padding: 15px 20px;
+      background: white;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      gap: 20px;
+    }
+    .top-menu span, .top-menu a {
+      text-decoration: none;
+      color: inherit;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .top-menu span:hover { color: #2563eb; }
+    .active-nav {
+      background: #2563eb !important;
+      color: white !important;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="top-menu">
+  <span>Home</span>
+  <span>Goal</span>
+  <a th:href="@{/student/sessions}">
+    <span>Session</span>
+  </a>
+  <a th:href="@{/checkins}">
+    <span>CheckIn</span>
+  </a>
+
+  <a th:href="@{/student/sessions/payment}">
+    <span>Payment</span>
+  </a>
+</div>
+<div class="container">
+  <h2>Check-Ins</h2>
+
+
+  <form th:action="@{/checkins}" method="post" enctype="multipart/form-data">
+    <label>
+      Subject:
+      <input type="text" name="subject" required>
+    </label>
+
+    <label>
+      Professor:
+      <input type="text" name="professor" required>
+    </label>
+
+    <label>
+      Notes:
+      <textarea name="notes"></textarea>
+    </label>
+
+    <label>
+      File:
+      <input type="file" name="file">
+    </label>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <hr>
+
+  <h3>Past Check-Ins</h3>
+
+  <div th:each="checkIn : ${checkIns}" class="checkin-card">
+    <p>
+      <b th:text="${checkIn.subject}"></b> |
+      <span th:text="${checkIn.professor}"></span>
+    </p>
+    <p>Notes: <span th:text="${checkIn.notes}"></span></p>
+    <small th:text="${checkIn.createdAt}"></small>
+
+
+    <div th:if="${checkIn.fileName != null}">
+      <a th:href="@{/checkins/file/{id}(id=${checkIn.id})}" target="_blank" class="file-link"
+         th:text="${checkIn.fileName}">View File</a>
+    </div>
+
+
+    <div class="actions">
+      <a th:href="@{/checkins/edit/{id}(id=${checkIn.id})}">
+        <button type="button">Edit</button>
+      </a>
+      <form th:action="@{/checkins/delete/{id}(id=${checkIn.id})}" method="post">
+        <button type="submit">Delete</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

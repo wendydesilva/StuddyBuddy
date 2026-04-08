@@ -8,35 +8,304 @@
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
     <style>
-        .menu-buttons a {
-            margin: 8px 8px 8px 0;
-        }
 
-        .logout-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
+        body {
+            display: flex;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f6f9;
+            color: #1e293b;
+            min-height: 100vh;
+
+            & .side-bar {
+                width: 240px;
+                height: 100vh; /* means 100% of the viewport height, always fills the screen */
+                position: fixed; /* keeps it in place when the page scrolls */
+                background: #1e293b;
+                color: white;
+                left: 0;
+                top: 0;
+                padding: 25px 20px;
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+
+                h3 {
+                    font-size: 16px;
+                    font-weight: 500;
+                    margin-bottom: 2px;
+                }
+
+                hr {
+                    border: 0.5px solid #475569;
+                    margin: 10px 0;
+                }
+
+                .label {
+                    font-size: 11px;
+                    color: #94a3b8;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    margin-bottom: 2px;
+                }
+
+                .value {
+                    font-size: 13px;
+                    color: #cbd5e1;
+                    margin-bottom: 10px;
+                }
+
+                .logout-btn {
+                    margin-top: auto;
+                    padding: 8px 12px;
+                    border: none;
+                    background: #ef4444;
+                    color: white;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    width: 100%;
+                    text-align: center;
+                    text-decoration: none;
+                    font-size: 13px;
+                    display: block;
+
+                    :hover {
+                        background: #dc2626;
+                        color: white;
+                    }
+                }
+            }
+
+            & .main-content {
+                margin-left: 240px;
+                width: calc(100% - 240px);
+                display: flex;
+                flex-direction: column;
+
+                & .menu-buttons {
+                    background: white;
+                    border-bottom: 1px solid #ddd;
+                    display: flex;
+                    gap: 5px;
+                    padding: 15px 20px;
+                    position: sticky;
+                    top: 0;
+                    z-index: 10;
+
+                    & a {
+                        text-decoration: none;
+                        color: #1e293b;
+                        font-weight: 500;
+                        font-size: 13px;
+                        padding: 6px 14px;
+                        border-radius: 6px;
+                        transition: background 0.15s;
+
+                        &:hover {
+                            background: #f1f5f9;
+                            color: white;
+                        }
+                    }
+                }
+                .page-body{
+                    padding: 25px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 25px;
+                }
+                .attendance-title{
+                    font-size: 16px;
+                    font-weight: 500;
+                    color: #1e293b;
+                    margin-bottom: 14px;
+                }
+
+                & .attendance-controller {
+                    display: flex;
+                    gap: 16px;
+                    flex-wrap: wrap;
+
+                    .attendance-card {
+                        background: white;
+                        border-radius: 12px;
+                        padding: 20px;
+                        flex: 1;
+                        min-width: 200px;
+                        border: 0.5px solid #e2e8f0;
+
+                        h4 {
+                            font-size: 13px;
+                            font-weight: 500;
+                            color: #64748b;
+                            margin-bottom: 16px;
+                        }
+
+                        .subject-name {
+                            font-size: 14px;
+                            font-weight: 500;
+                            color: #1e293b;
+                            margin-top: 4px;
+                        }
+
+                        .att-count {
+                            font-size: 22px;
+                            font-weight: 500;
+                            color: #2563eb;
+                        }
+
+                        .att-label {
+                            font-size: 11px;
+                            color: #94a3b8;
+                        }
+
+                        .present-status {
+                            font-size: 12px;
+                            margin-top: 8px;
+                            padding: 3px 8px;
+                            border-radius: 20px;
+                            display: inline-block;
+
+                            .present {
+                                background: #dcfce7;
+                                color: #166534;
+                            }
+
+                            .absent {
+                                background: #fee2e2;
+                                color: #991b1b;
+                            }
+                        }
+
+                        .att-date {
+                            font-size: 11px;
+                            color: #94a3b8;
+                            margin-top: 6px;
+                        }
+                    }
+                }
+                & .timetable-wrap {
+                        background: white;
+                        border-radius: 12px;
+                        border: 0.5px solid #e2e8f0;
+                        overflow: hidden;
+
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+
+                        th {
+                            background: #2563eb;
+                            color: white;
+                            padding: 12px 16px;
+                            text-align: center;
+                            font-size: 13px;
+                            font-weight: 500;
+                        }
+
+                        td {
+                            padding: 12px 16px;
+                            text-align: center;
+                            border: 0.5px solid #f1f5f9;
+                            font-size: 13px;
+                            color: #334155;
+                        }
+
+                        tr:last-child td {
+                            border-bottom: none;
+                        }
+
+                        tr:nth-child(even) {
+                            background: #f9fafb;
+                        }
+                    }
+                }
+            }
         }
     </style>
 </head>
 
 <body class="container" style="position: relative;">
 
-<!-- LOGOUT TOP RIGHT -->
-<a href="/logout" class="btn btn-default logout-btn">Logout</a>
+<!-- The side content of the page -->
+<div class="side-bar">
 
-<h2>Welcome, <span th:text="${user.name}"></span>!</h2>
+    <h3>Hey, <span th:text="${student.fullName}">Student</span></h3>
+    <hr>
 
-<hr>
+    <p class="label">Email</p>
+    <p class="value" th:text="${student.email}">student@email.com</p>
+    <p class="label">Course</p>
+    <p class="label" th:text="${student.course}">Course Name</p>
 
-<!-- MAIN OPTIONS -->
-<div class="menu-buttons">
-    <a href="/student/goals" class="btn btn-primary">View Goals</a>
-    <a href="/student/tasks" class="btn btn-info">My Tasks</a>
-    <a href="/student/rewards" class="btn btn-warning">View Rewards</a>
-    <a href="/student/prizes" class="btn btn-success">My Prizes</a>
-    <a href="/student/notifications" class="btn btn-danger">Notifications</a>
-    <a th:href="@{/student/sessions}" class="btn btn-info">My Sessions</a>
+    <a href="/logout" class="btn btn-default logout-btn">Logout</a>
+</div>
+
+<!-- The main content of the page -->
+<div class="main-content">
+    <!-- navigation bar -->
+    <div class="menu-buttons">
+        <a th:href="@{/student/home/{id}(id=${coach.id})}">Home</a>
+        <a href="/student/goals" class="btn btn-primary">View Goals</a>
+        <a th:href="@{/student/sessions}">Session</a>
+<!--        <a th:href="@{/student/sessions}" class="btn btn-info">My Sessions</a>-->
+        <a href="/student/tasks" class="btn btn-info">My Tasks</a>
+        <a href="/student/rewards" class="btn btn-warning">View Rewards</a>
+        <a href="/student/prizes" class="btn btn-success">My Prizes</a>
+        <a href="/student/notifications" class="btn btn-danger">Notifications</a>
+    </div>
+
+    <div class="page-body">
+        <!-- attendance -->
+        <div>
+            <p class="attendance-title">Attendance</p>
+            <div class="attendance-controller">
+                <div class="attendance-card" th:each="record : ${attendance}">
+
+                    <div class="subject-name" th:text="${record.subject.name}">Subject</div>
+                    <div class="att-count">1</div>
+                    <div class="att-label">Class Recorded</div>
+                    <span class="present-status"
+                          th:classappend="${record.present} ? 'presnt' : 'absent'"
+                          th:text="${record.present} ? 'presnt' : 'absent'"
+                    >Status</span>
+                    <div class="att-date" th:text="${record.attendanceDate}">Date</div>
+                </div>
+
+                <div class="att-card" th:if="${#lists.isEmpty(attendance)}">
+                    <div class="subject-name">There are no attendance records yet</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- timetable -->
+        <div>
+            <p class="timetable-title">Timetable</p>
+            <div class="timetable-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Subject Name</th>
+                        <th>Room Number</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="entry : ${timetable}">
+                        <td th:text="${entry.dayOfWeek}">Day</td>
+                        <td th:text="${entry.startTime}">Start Time</td>
+                        <td th:text="${entry.endTime}">End Time</td>
+                        <td th:text="${entry.subjectName}">Subject Name</td>
+                        <td th:text="${entry.roomNumber}">Room Number</td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(timetable)}">
+                        <td colspan="4" style="color: #94a3b8">No timetable entries yet</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 </body>

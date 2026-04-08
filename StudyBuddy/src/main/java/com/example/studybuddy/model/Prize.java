@@ -9,29 +9,29 @@ public class Prize {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long prizeId;
+    private Long prizeId; // primary key
 
     @Column(nullable = false)
-    private String prizeName;
+    private String prizeName; // prize name
 
     @Column(nullable = false)
-    private String description;
+    private String description; // prize details
 
     @Column(nullable = false)
-    private Integer pointsRequired;
+    private Integer pointsRequired; // points needed
 
-    private LocalDate requestedDate;
-    private LocalDate awardedDate;
+    private LocalDate requestedDate; // request date
+    private LocalDate awardedDate; // approval date
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PrizeStatus status = PrizeStatus.PENDING;
+    private PrizeStatus status = PrizeStatus.PENDING; // request status
 
-    private String adminNote;
+    private String adminNote; // admin feedback
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id", nullable = false)
-    private User student;
+    private User student; // student who requested
 
     public enum PrizeStatus {
         PENDING,

@@ -20,63 +20,90 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class TaskControllerTest {
 
-    @Mock TaskRepository taskRepo;
-    @Mock GoalRepository goalRepo;
-    @Mock UserRepository userRepo;
-    @Mock RewardRepository rewardRepo;
-    @Mock GoalController goalController;
-    @Mock NotificationRepository notifRepo;
-    @Mock HttpSession session;
-    @Mock Model model;
-    @Mock RedirectAttributes ra;
+    @Mock
+    TaskRepository taskRepo;
+    @Mock
+    GoalRepository goalRepo;
+    @Mock
+    UserRepository userRepo;
+    @Mock
+    RewardRepository rewardRepo;
+    @Mock
+    GoalController goalController;
+    @Mock
+    NotificationRepository notifRepo;
+    @Mock
+    HttpSession session;
+    @Mock
+    Model model;
+    @Mock
+    RedirectAttributes ra;
 
-    @InjectMocks TaskController controller;
+    @InjectMocks
+    TaskController controller;
 
     @Test
     void submitTask_ok() {
+
+        // student user
         User s = new User();
         s.setUserId(1L);
-        s.setRole(Role.STUDENT); // ✅ REQUIRED
+        s.setRole(Role.STUDENT);
 
+        // coach user
         User c = new User();
         c.setUserId(2L);
 
+        // task to submit
         Task t = new Task();
         t.setStudent(s);
         t.setCoach(c);
 
+        // mock session and task lookup
         when(session.getAttribute("loggedUser")).thenReturn(s);
         when(taskRepo.findById(1L)).thenReturn(Optional.of(t));
 
+        // execute submission
         String view = controller.submitTask(1L, "done", session, ra);
 
+        // check redirect
         assertEquals("redirect:/student/tasks", view);
+
+        // verify status updated
         assertEquals(TaskStatus.SUBMITTED, t.getStatus());
     }
 
     @Test
     void completeTask_ok() {
+
+        // coach user
         User c = new User();
         c.setUserId(2L);
-        c.setRole(Role.COACH); // ✅ REQUIRED
+        c.setRole(Role.COACH);
 
+        // student user
         User s = new User();
         s.setUserId(1L);
 
+        // goal
         Goal g = new Goal();
         g.setGoalId(7L);
 
+        // task to complete
         Task t = new Task();
         t.setCoach(c);
         t.setStudent(s);
         t.setGoal(g);
         t.setStatus(TaskStatus.SUBMITTED);
 
+        // mock session and task lookup
         when(session.getAttribute("loggedUser")).thenReturn(c);
         when(taskRepo.findById(1L)).thenReturn(Optional.of(t));
 
+        // execute completion
         controller.completeTask(1L, 20, session, ra);
 
+        // verify status updated
         assertEquals(TaskStatus.COMPLETED, t.getStatus());
     }
 }

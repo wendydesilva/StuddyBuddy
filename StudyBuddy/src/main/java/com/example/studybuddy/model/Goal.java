@@ -9,36 +9,36 @@ public class Goal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long goalId;
+    private Long goalId; // primary key
 
     @Column(nullable = false)
-    private String title;
+    private String title; // goal title
 
     @Column(nullable = false)
-    private String description;
+    private String description; // goal details
 
-    private LocalDate targetDate;
+    private LocalDate targetDate; // target completion date
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private GoalStatus status = GoalStatus.PENDING;
+    private GoalStatus status = GoalStatus.PENDING; // goal status
 
     @Column(nullable = false)
-    private Integer progress = 0;
+    private Integer progress = 0; // progress percentage
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id", nullable = false)
-    private User student;
+    private User student; // owner of goal
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coach_id")
-    private User coach;
+    private User coach; // assigned coach
 
     @Transient
-    private Integer totalTasks = 0;
+    private Integer totalTasks = 0; // total tasks (not stored)
 
     @Transient
-    private Integer completedTasks = 0;
+    private Integer completedTasks = 0; // completed tasks (not stored)
 
     public Long getGoalId() {
         return goalId;

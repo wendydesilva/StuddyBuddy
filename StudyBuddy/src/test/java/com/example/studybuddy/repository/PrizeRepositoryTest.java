@@ -8,15 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 @DataJpaTest
 class PrizeRepositoryTest {
 
     @Autowired
-    private PrizeRepository prizeRepository;
+    private PrizeRepository prizeRepository; // test prize queries
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository userRepository; // test user data
 
     @Test
     void testTotalApprovedPointsUsed() {
@@ -30,7 +29,7 @@ class PrizeRepositoryTest {
         student.setTotalPoints(0);
         userRepository.save(student);
 
-        // create approved prize
+        // first approved prize
         Prize p1 = new Prize();
         p1.setPrizeName("Gift Card");
         p1.setDescription("Test");
@@ -39,7 +38,7 @@ class PrizeRepositoryTest {
         p1.setStudent(student);
         prizeRepository.save(p1);
 
-        // create another approved prize
+        // second approved prize
         Prize p2 = new Prize();
         p2.setPrizeName("Headphones");
         p2.setDescription("Test");
@@ -48,9 +47,10 @@ class PrizeRepositoryTest {
         p2.setStudent(student);
         prizeRepository.save(p2);
 
-        // test sum
+        // calculate total points used
         Integer total = prizeRepository.getTotalApprovedPointsUsed(student);
 
+        // verify sum
         assertEquals(80, total);
     }
 }

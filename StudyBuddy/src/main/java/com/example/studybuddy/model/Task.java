@@ -9,34 +9,34 @@ public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long taskId;
+    private Long taskId; // primary key
 
     @Column(nullable = false)
-    private String title;
+    private String title; // task title
 
     @Column(nullable = false)
-    private String description;
+    private String description; // task details
 
-    private LocalDate dueDate;
+    private LocalDate dueDate; // due date
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TaskStatus status = TaskStatus.ASSIGNED;
+    private TaskStatus status = TaskStatus.ASSIGNED; // task status
 
     @Column(length = 1000)
-    private String submissionNote;
+    private String submissionNote; // student submission note
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "goal_id", nullable = false)
-    private Goal goal;
+    private Goal goal; // related goal
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id", nullable = false)
-    private User student;
+    private User student; // assigned student
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coach_id", nullable = false)
-    private User coach;
+    private User coach; // assigned coach
 
     public Long getTaskId() {
         return taskId;

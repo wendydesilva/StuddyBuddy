@@ -8,23 +8,23 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long userId; // primary key
 
     @Column(nullable = false)
-    private String name;
+    private String name; // user name
 
     @Column(nullable = false, unique = true)
-    private String email;
+    private String email; // unique email
 
     @Column(nullable = false)
-    private String password;
+    private String password; // user password
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role;
+    private Role role; // user role (student, coach, admin)
 
     @Column(nullable = false)
-    private Integer totalPoints = 0;
+    private Integer totalPoints = 0; // accumulated points
 
     public Long getUserId() {
         return userId;

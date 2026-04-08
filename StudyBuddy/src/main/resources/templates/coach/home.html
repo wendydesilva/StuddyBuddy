@@ -7,30 +7,346 @@
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
     <style>
-        .menu-buttons a {
-            margin: 8px 8px 8px 0;
+        body {
+            display: flex;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f6f9;
+            color: #1e293b;
+            min-height: 100vh;
+
+            & .side-bar{
+                width: 240px;
+                height: 100vh; /* means 100% of the viewport height, always fills the screen */
+                position: fixed; /* keeps it in place when the page scrolls */
+                background: #1e293b;
+                color: white;
+                left: 0;
+                top: 0;
+                padding: 25px 20px;
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+
+                h3{
+                    font-size: 16px;
+                    font-weight: 500;
+                    margin-bottom: 2px;
+                }
+
+                hr{
+                    border: 0.5px solid #475569;
+                    margin: 10px 0;
+                }
+                .label{
+                    font-size: 11px;
+                    color: #94a3b8;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    margin-bottom: 2px;
+                }
+                .value{
+                    font-size: 13px;
+                    color: #cbd5e1;
+                    margin-bottom: 10px;
+                }
+                #select-subject{
+                    width: 100%;
+                    background: #334155;
+                    color: #cbd5e1;
+                    border: 0.5px solid #475569;
+                    border-radius: 6px;
+                    padding: 7px 10px;
+                    font-size: 13px;
+                    cursor: pointer;
+                    margin-top: 4px;
+                    :focus{
+                        outline: none;
+                        border-color: #94a3b8;
+                    }
+                }
+                .logout-btn{
+                    margin-top: auto;
+                    padding: 8px 12px;
+                    border: none;
+                    background: #ef4444;
+                    color: white;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    width: 100%;
+                    text-align: center;
+                    text-decoration: none;
+                    font-size: 13px;
+                    display: block;
+                    :hover{
+                        background: #dc2626;
+                        color: white;
+                    }
+                }
+            }
+
+            & .main-content {
+                margin-left: 240px;
+                width: calc(100% - 240px);
+                display: flex;
+                flex-direction: column;
+                & .menu-buttons{
+                    background: white;
+                    border-bottom: 1px solid #ddd;
+                    display: flex;
+                    gap: 5px;
+                    padding: 15px 20px;
+                    position: sticky;
+                    top: 0;
+                    z-index: 10;
+                    & a{
+                        text-decoration: none;
+                        color: #1e293b;
+                        font-weight: 500;
+                        font-size: 13px;
+                        padding: 6px 14px;
+                        border-radius: 6px;
+                        transition: background 0.15s;
+                        &:hover{
+                            background: #f1f5f9;
+                            color: white;
+                        }
+                    }
+                }
+                & #dashboard{
+                    padding: 25px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 25px;
+                    .dash-title{
+                        font-size: 16px;
+                        font-weight: 500;
+                        color: #1e293b;
+                        margin-bottom: 14px;
+                        padding-bottom: 8px;
+                        border-bottom: 0.5px solid #e2e8f0;
+                    }
+                    .stats-controller{
+                        display: flex;
+                        gap: 16px;
+                        flex-wrap: wrap;
+                        .stat-card{
+                            background: white;
+                            border-radius: 12px;
+                            padding: 20px;
+                            flex: 1;
+                            min-width: 200px;
+                            border: 0.5px solid #e2e8f0;
+                            h4{
+                                font-size: 13px;
+                                font-weight: 500;
+                                color: #64748b;
+                                margin-bottom: 16px;
+                            }
+                            .stat-numbers{
+                                display: flex;
+                                gap: 20px;
+                                div{
+                                    display: flex;
+                                    flex-direction: column;
+                                    align-items: center;
+                                    p{
+                                        font-size: 32px;
+                                        font-weight: 500;
+                                        color: #1e293b;
+                                        line-height: 1;
+                                    }
+                                    span{
+                                        font-size: 11px;
+                                        color: #94a3b8;
+                                        margin-top: 4px;
+                                    }
+                                }
+                                .divider{
+                                    width: 0.5px;
+                                    background: #e2e8f0;
+                                    align-self: stretch;
+                                }
+                            }
+                            .pay-amount{
+                                font-size: 32px;
+                                font-weight: 500;
+                                color: #1e293b;
+                            }
+                            .pay-hours{
+                                font-size: 12px;
+                                color: #94a3b8;
+                                margin-bottom: 8px;
+                            }
+                        }
+                    }
+                    .schedule-controller{
+                        .schedule{
+                            background: white;
+                            border-radius: 12px;
+                            border: 0.5px solid #e2e8f0;
+                            padding: 20px;
+                            flex: 1;
+                            h4{
+                                font-size: 13px;
+                                font-weight: 500;
+                                color: #64748b;
+                                margin-bottom: 14px;
+                            }
+                            .sch-time{
+                                font-size: 12px;
+                                color: #94a3b8;
+                                min-width: 55px;
+                            }
+                            .sch-subject{
+                                font-size: 13px;
+                                color: #1e293b;
+                                flex: 1;
+                            }
+                            .sch-status{
+                                font-size: 11px;
+                                padding: 2px 8px;
+                                border-radius: 20px;
+                            }
+                            .sch-empty{
+                                font-size: 13px;
+                                color: #94a3b8;
+                                text-align: center;
+                                padding: 20px 0;
+                            }
+                        }
+                        .events{
+                            background: white;
+                            border-radius: 12px;
+                            border: 0.5px solid #e2e8f0;
+                            padding: 20px;
+                            flex: 1;
+                            h4{
+                                font-size: 13px;
+                                font-weight: 500;
+                                color: #64748b;
+                                margin-bottom: 14px;
+                            }
+                            .event-date{
+                                font-size: 11px;
+                                color: #94a3b8;
+                                margin-bottom: 3px;
+                            }
+                            .event-title{
+                                font-size: 13px;
+                                color: #1e293b;
+                            }
+                            .event-empty{
+                                font-size: 13px;
+                                color: #94a3b8;
+                                text-align: center;
+                                padding: 20px 0;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
-        .logout-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
+        /*.menu-buttons a {*/
+        /*    margin: 8px 8px 8px 0;*/
+        /*}*/
+
+        /*.logout-btn {*/
+        /*    position: absolute;*/
+        /*    top: 20px;*/
+        /*    right: 20px;*/
+        /*}*/
     </style>
 </head>
 
 <body class="container" style="position: relative;">
 
-<a href="/logout" class="btn btn-default logout-btn">Logout</a>
+<!-- The side content of the page -->
+<div class="side-bar">
 
-<h2>Welcome, <span th:text="${user.name}"></span>!</h2>
+        <h3>Hey, <span th:text="${coach.fullName}">Coach</span></h3>
+        <hr>
+
+        <p class="label">Email</p>
+        <p class="value" th:text="${coach.email}">coach@email.com</p>
+        <p class="label">DOB</p>
+        <p class="label" th:text="${coach.dob}">00/00/0000</p>
+        <p class="label">Subject</p>
+        <p th:text="${coach.subjectExpertise}">Subject</p>
+
+    <section id="select-subject">
+        <option>Select Subject</option>
+        <option th:text="${coach.subjectExtertise}">Subject</option>
+    </section>
+
+    <a href="/logout" class="btn btn-default logout-btn">Logout</a>
+</div>
+
+
+<!--<h2>Welcome, <span th:text="${user.name}"></span>!</h2>-->
 <hr>
 
-<div class="menu-buttons">
-    <a th:href="@{/coach/goals/requests}" class="btn btn-primary">Goal Requests</a>
-    <a th:href="@{/coach/goals/assigned}" class="btn btn-info">Assigned Goals</a>
-    <a th:href="@{/coach/notifications}" class="btn btn-warning">Notifications</a>
+<!-- The main content of the page -->
+<div class="main-content">
+    <!-- navigation bar -->
+    <div class="menu-buttons">
+        <a th:href="@{/coach/home/{id}(id=${coach.id})}">Home</a>
+        <a th:href="@{/coach/goals/requests}" class="btn btn-primary">Goal Requests</a>
+        <a th:href="@{/coach/goals/assigned}" class="btn btn-info">Assigned Goals</a>
+        <a th:href="@{/coach/sessions}">Session</a>
+        <a th:href="@{/coach/notifications}" class="btn btn-warning">Notifications</a>
+    </div>
+
+    <div id="dashboard">
+        <p class="dash-title">Dashboard</p>
+
+        <div class="stats-controller">
+            <div class="stat-card">
+                <h4>Attendance Overview</h4>
+                <div class="stat-numbers">
+                    <div>
+                        <p th:text="${totalStudents}">0</p>
+                        <span>Total Students</span>
+                    </div>
+                    <div class="divider"></div>
+                    <div>
+                        <p th:text="${totalClasses}">0</p>
+                        <span>Total Classes</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <h4>Generated Pay</h4>
+                <p class="pay-hours">Total Hours: <span th:text="${totalHours}">0</span>hrs/p>
+                <p class="pay-amount">$<span th:text="${#numbers.formatDecimal(generatedPay, 1, 2)}">0.00</span></p>
+            </div>
+        </div>
+
+        <div class="schedule-controller">
+            <div class="schedule">
+                <h4>My Schedule</h4>
+                <div th:each="session : ${session}">
+                    <span class="sch-time" th:text="${session.sessionDateTime}">00:00</span>
+                    <span class="sch-subject" th:text="${session.subjectName}">Subject</span>
+                    <span class="sch-status" th:text="${session.status}">Status</span>
+                </div>
+                <p class="sch-empty" th:if="${#lists.isEmpty(session)}">There are no sessions scheduled</p>
+            </div>
+
+            <div class="events">
+                <h4>Upcoming Events</h4>
+                <div th:each="event : ${events}">
+                    <p class="event-date" th:text="${event.startDate + ' - ' + event.endDate}">Date</p>
+                    <p class="event-title" th:text="${event.title}">Event</p>
+                </div>
+                <p class="event-empty" th:if="${#lists.isEmpty(events)}">There are no upcoming events</p>
+            </div>
+        </div>
+    </div>
 </div>
+
+
 
 </body>
 </html>

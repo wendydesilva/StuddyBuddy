@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Session Page</title>
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f6f9;
+            color: #1e293b;
+        }
+
+
+        .sidebar {
+            width: 240px;
+            background: #1e293b;
+            color: #fff;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 20px;
+        }
+        .sidebar h3 { margin-bottom: 5px; }
+        .sidebar p {
+            font-size: 14px;
+            color: #cbd5e1;
+            margin: 10px 0;
+        }
+        .sidebar hr { border: 0.5px solid #475569; margin: 15px 0; }
+        .sidebar button {
+            margin-top: 20px;
+            padding: 8px 12px;
+            border: none;
+            background: #ef4444;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .sidebar button:hover { background: #dc2626; }
+
+
+        .top-menu {
+            margin-left: 240px;
+            padding: 15px 20px;
+            background: white;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            gap: 20px;
+        }
+        .top-menu span, .top-menu a {
+            text-decoration: none;
+            color: inherit;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .top-menu span:hover { color: #2563eb; }
+        .active-nav {
+            background: #2563eb !important;
+            color: white !important;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .container {
+            margin-left: 240px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+
+
+        h2 {
+            margin: 25px 0 5px 0;
+            font-size: 1.5rem;
+        }
+
+        h2 + table,
+        h2:contains("Book Sessions") {
+            margin-bottom: 0px !important;
+            padding-bottom: 0px !important;
+        }
+
+
+        .plans {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 10px;
+        }
+        .plan-card {
+            background: white;
+            padding: 15px;
+            flex: 1;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+            border: 2px solid transparent;
+        }
+        .plan-card:hover { transform: translateY(-5px); }
+        .selected-plan {
+            border-color: #10b981;
+            background: #ecfdf5;
+        }
+        .plan-card h3 { margin: 0 0 10px 0; }
+        .plan-card button {
+            margin-top: 15px;
+            padding: 8px 16px;
+            border: none;
+            background: #2563eb;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 0px !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        th {
+            background: #2563eb;
+            color: white;
+            padding: 12px;
+            text-align: center;
+        }
+        td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        tr:last-child td { border-bottom: none; }
+        tr:nth-child(even) { background: #f9fafb; }
+
+
+        .actions { margin-top: 20px; display: flex; gap: 10px; }
+        .btn-success { background: #10b981; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; text-decoration: none; }
+        .btn-danger { background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; }
+
+
+        form { display: inline; }
+    </style>
+</head>
+<body>
+
+
+
+
+<div class="top-menu">
+    <span>Home</span>
+    <span>Goal</span>
+    <span style="background:#ccc; padding:3px 5px;">Session</span>
+    <a th:href="@{/checkins}">
+        <span>CheckIn</span>
+    </a>
+
+    <a th:href="@{/student/sessions/payment}">
+        <span>Payment</span>
+    </a>
+</div>
+
+
+<div class="container">
+
+<!--    <div class="session-info">-->
+<!--&lt;!&ndash;        <p>Session ID: <span th:text="${currentSession.id}">000000</span></p>&ndash;&gt;-->
+<!--&lt;!&ndash;        <p>Status: <span th:text="${currentSession.status}">Pending</span></p>&ndash;&gt;-->
+
+<!--&lt;!&ndash;        <p>Selected Plan:&ndash;&gt;-->
+<!--&lt;!&ndash;            <span th:text="${selectedPlan != null ? selectedPlan.name : 'None'}">None</span>&ndash;&gt;-->
+<!--&lt;!&ndash;        </p>&ndash;&gt;-->
+<!--    </div>-->
+
+
+    <h2>Choose your session plan</h2>
+    <div class="plans">
+        <div class="plan-card"
+             th:each="plan : ${plans}"
+             th:classappend="${selectedPlan != null and plan.id == selectedPlan.id} ? 'selected-plan'">
+            <h3 th:text="${plan.name}">Basic</h3>
+            <p>CA$ <span th:text="${plan.price}">0</span>/mo</p>
+
+            <form th:action="@{/student/sessions/selectPlan}" method="post">
+                <input type="hidden" name="planId" th:value="${plan.id}"/>
+                <button type="submit">Confirm</button>
+            </form>
+        </div>
+    </div>
+    <h2>Book Sessions</h2>
+    <table border="1" style="width:100%; border-collapse:collapse;">
+        <thead>
+        <tr>
+            <th>Subject</th>
+            <th>Instructor</th>
+
+            <th>Status</th>
+            <th>Time</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="Stsession : ${allSessions}">
+            <td th:text="${Stsession.subject}">Subject</td>
+            <td th:text="${Stsession.instructor}">Instructor</td>
+            <td th:text="${Stsession.status}">Status</td>
+            <td th:text="${#temporals.format(Stsession.sessionTime, 'dd-MMM-yyyy HH:mm')}">Time</td>
+            <td>
+
+                <form th:if="${Stsession.status == 'PENDING'}"
+                      th:action="@{/student/sessions/cancel/{id}(id=${Stsession.id})}"
+                      method="post" style="display:inline;">
+                    <button type="submit">Cancel</button>
+                </form>
+
+
+                <form th:if="${Stsession.status == 'NEW'}"
+                      th:action="@{/student/sessions/book}" method="post" style="display:inline;">
+                    <input type="hidden" name="sessionId" th:value="${Stsession.id}"/>
+                    <button type="submit">Book</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="actions">
+        <form th:action="@{/student/sessions/cancel/{id}(id=${currentSession.id})}" method="post" style="display:inline;">
+            <button type="submit">Cancel</button>
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

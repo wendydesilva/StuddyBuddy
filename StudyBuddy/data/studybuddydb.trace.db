@@ -70,6 +70,7 @@ Caused by: java.lang.AssertionError: 13
 	at org.h2.mvstore.FileStore.executeFileStoreOperation(FileStore.java:1894)
 	at org.h2.mvstore.MVStore.executeFilestoreOperation(MVStore.java:1044)
 	... 13 more
+<<<<<<< HEAD
 2026-04-08 13:29:16.956673-07:00 database: close
 org.h2.message.DbException: IO Exception: "Closing" [90028-240]
 	at org.h2.message.DbException.get(DbException.java:212)
@@ -106,3 +107,14 @@ Caused by: java.lang.AssertionError: 19
 	at org.h2.mvstore.FileStore.executeFileStoreOperation(FileStore.java:1894)
 	at org.h2.mvstore.MVStore.executeFilestoreOperation(MVStore.java:1044)
 	... 13 more
+=======
+2026-04-04 17:23:59.055331-07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "STUDENT" already exists; SQL statement:
+CREATE TABLE STUDENT ( id INT PRIMARY KEY, name VARCHAR(255), email VARCHAR(255), course VARCHAR(255), dob VARCHAR(255) ) [42101-240]
+2026-04-04 17:29:40.603993-07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "STUDENT_SE" already exists; SQL statement:
+CREATE TABLE STUDENT_SE ( id INT PRIMARY KEY, name VARCHAR(255), email VARCHAR(255), course VARCHAR(255), dob VARCHAR(255) ) [42101-240]
+2026-04-04 17:31:21.913680-07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SESSION_PLAN" already exists; SQL statement:
+CREATE TABLE SESSION_PLAN ( id INT PRIMARY KEY, name VARCHAR(255), price DECIMAL(10,2), duration_minutes INT ) [42101-240]
+>>>>>>> 0512d17e54a7a42ff04d97ace80dba7d1c253eae

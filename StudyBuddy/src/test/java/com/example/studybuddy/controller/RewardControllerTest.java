@@ -20,30 +20,44 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class RewardControllerTest {
 
-    @Mock RewardRepository repo;
-    @Mock HttpSession session;
-    @Mock Model model;
-    @InjectMocks RewardController controller;
+    @Mock
+    RewardRepository repo;
+    @Mock
+    HttpSession session;
+    @Mock
+    Model model;
+    @InjectMocks
+    RewardController controller;
 
     @Test
     void rewards_success() {
+
+        // create student with points
         User u = new User();
         u.setRole(Role.STUDENT);
         u.setTotalPoints(50);
 
+        // mock session and rewards
         when(session.getAttribute("loggedUser")).thenReturn(u);
         when(repo.findByStudent(u)).thenReturn(List.of(new Reward()));
 
+        // call method
         String view = controller.studentRewards(session, model);
 
+        // check correct view
         assertEquals("student/rewards", view);
+
+        // verify points sent to view
         verify(model).addAttribute("totalPoints", 50);
     }
 
     @Test
     void rewards_redirect() {
+
+        // mock no user logged in
         when(session.getAttribute("loggedUser")).thenReturn(null);
 
+        // check redirect to login
         assertEquals("redirect:/login", controller.studentRewards(session, model));
     }
 }

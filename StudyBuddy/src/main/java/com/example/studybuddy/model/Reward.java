@@ -9,29 +9,29 @@ public class Reward {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long rewardId;
+    private Long rewardId; // primary key
 
     @Column(nullable = false)
-    private Integer pointsAwarded;
+    private Integer pointsAwarded; // points given
 
     @Column(nullable = false)
-    private LocalDate dateAwarded = LocalDate.now();
+    private LocalDate dateAwarded = LocalDate.now(); // date assigned
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id", nullable = false)
-    private User student;
+    private User student; // student receiving reward
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "goal_id", nullable = false)
-    private Goal goal;
+    private Goal goal; // related goal
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id", nullable = false)
-    private Task task;
+    private Task task; // related task
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assigned_by", nullable = false)
-    private User assignedBy;
+    private User assignedBy; // coach who assigned
 
     public Long getRewardId() {
         return rewardId;

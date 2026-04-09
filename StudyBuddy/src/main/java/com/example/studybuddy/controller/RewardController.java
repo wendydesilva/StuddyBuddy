@@ -16,18 +16,27 @@ public class RewardController {
 
     private final RewardRepository rewardRepository;
 
+    // inject reward repository
     public RewardController(RewardRepository rewardRepository) {
         this.rewardRepository = rewardRepository;
     }
 
     @GetMapping("/student/rewards")
     public String studentRewards(HttpSession session, Model model) {
+
+        // get logged-in student
         User student = (User) session.getAttribute("loggedUser");
+
+        // allow only student
         if (student == null || student.getRole() != Role.STUDENT) return "redirect:/login";
 
+        // fetch rewards
         List<Reward> rewards = rewardRepository.findByStudent(student);
+
+        // send data to view
         model.addAttribute("rewards", rewards);
         model.addAttribute("totalPoints", student.getTotalPoints());
+
         return "student/rewards";
     }
 }

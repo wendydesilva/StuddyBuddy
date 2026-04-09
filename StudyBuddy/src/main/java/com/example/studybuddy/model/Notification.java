@@ -9,20 +9,20 @@ public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long notificationId;
+    private Long notificationId; // primary key
 
     @Column(nullable = false)
-    private String message;
+    private String message; // notification text
 
     @Column(nullable = false)
-    private Boolean isRead = false;
+    private Boolean isRead = false; // read status
 
     @Column(nullable = false)
-    private LocalDate createdDate = LocalDate.now();
+    private LocalDate createdDate = LocalDate.now(); // date created
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private User user; // owner of notification
 
     public Long getNotificationId() {
         return notificationId;

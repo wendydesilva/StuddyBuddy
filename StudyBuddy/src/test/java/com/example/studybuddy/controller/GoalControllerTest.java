@@ -27,44 +27,65 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class GoalControllerTest {
 
-    @Mock GoalRepository repo;
-    @Mock UserRepository userRepo;
-    @Mock TaskRepository taskRepo;
-    @Mock NotificationRepository notifRepo;
-    @Mock HttpSession session;
-    @Mock Model model;
+    @Mock
+    GoalRepository repo;
+    @Mock
+    UserRepository userRepo;
+    @Mock
+    TaskRepository taskRepo;
+    @Mock
+    NotificationRepository notifRepo;
+    @Mock
+    HttpSession session;
+    @Mock
+    Model model;
 
-    @InjectMocks GoalController controller;
+    @InjectMocks
+    GoalController controller;
 
     @Test
     void createGoal_success() {
+
+        // create test student
         User student = new User();
         student.setRole(Role.STUDENT);
 
-        Goal g = new Goal();
+        Goal g = new Goal(); // new goal
 
+        // mock logged-in user
         when(session.getAttribute("loggedUser")).thenReturn(student);
 
+        // call method
         String view = controller.createGoal(g, null, session);
 
+        // check redirect
         assertEquals("redirect:/student/goals", view);
+
+        // verify goal saved
         verify(repo).save(g);
     }
 
     @Test
     void approveGoal_success() {
+
+        // create test coach
         User coach = new User();
         coach.setRole(Role.COACH);
 
         Goal g = new Goal();
-        g.setStudent(new User());
+        g.setStudent(new User()); // assign student
 
+        // mock session and repo
         when(session.getAttribute("loggedUser")).thenReturn(coach);
         when(repo.findById(1L)).thenReturn(Optional.of(g));
 
+        // call method
         String view = controller.approveGoal(1L, session);
 
+        // check redirect
         assertEquals("redirect:/coach/goals/assigned", view);
+
+        // verify status updated
         assertEquals(GoalStatus.ACTIVE, g.getStatus());
     }
 }

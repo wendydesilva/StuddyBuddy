@@ -22,18 +22,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class IntegrationTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    private MockMvc mockMvc; // simulate HTTP requests
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository userRepository; // access test database
 
     @BeforeEach
     void setUp() {
-        userRepository.deleteAll();
+        userRepository.deleteAll(); // clear users before each test
     }
 
     @Test
     void loginPageLoads() throws Exception {
+        // check login page loads
         mockMvc.perform(get("/login"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("login"));
@@ -41,6 +42,7 @@ class IntegrationTest {
 
     @Test
     void studentHomeWithoutLoginRedirects() throws Exception {
+        // check redirect when not logged in
         mockMvc.perform(get("/student/home"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login"));
@@ -48,6 +50,7 @@ class IntegrationTest {
 
     @Test
     void loginSuccessRedirectsToStudentHome() throws Exception {
+        // create test student
         User user = new User();
         user.setName("Test");
         user.setEmail("test@test.com");
@@ -56,6 +59,7 @@ class IntegrationTest {
         user.setTotalPoints(0);
         userRepository.save(user);
 
+        // perform login request
         mockMvc.perform(post("/login")
                         .param("email", "test@test.com")
                         .param("password", "123")
@@ -66,6 +70,7 @@ class IntegrationTest {
 
     @Test
     void studentHomeWithLoginLoads() throws Exception {
+        // create test student
         User user = new User();
         user.setName("Student");
         user.setEmail("student@test.com");
@@ -74,9 +79,11 @@ class IntegrationTest {
         user.setTotalPoints(0);
         userRepository.save(user);
 
+        // create logged-in session
         MockHttpSession session = new MockHttpSession();
         session.setAttribute("loggedUser", user);
 
+        // check home page loads
         mockMvc.perform(get("/student/home").session(session))
                 .andExpect(status().isOk())
                 .andExpect(view().name("student/home"));

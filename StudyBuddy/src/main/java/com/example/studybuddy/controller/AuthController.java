@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class AuthController {
 
-    @Autowired
+    @Autowired //access user data from the database
     private UserRepository userRepository;
 
     @GetMapping("/login")
@@ -30,9 +30,10 @@ public class AuthController {
 
         User user = userRepository.findByEmail(email).orElse(null);
 
+        // check if user exists, password matches, and role is correct
         if (user != null && user.getPassword().equals(password) && user.getRole() == role) {
-            session.setAttribute("loggedUser", user);
-
+            session.setAttribute("loggedUser", user);  // store user in session to keep them logged in
+            // redirect user based on their role
             if (role == Role.STUDENT) {
                 return "redirect:/student/home";
             } else if (role == Role.COACH) {
@@ -41,7 +42,7 @@ public class AuthController {
                 return "redirect:/admin/home";
             }
         }
-
+        // send error message back to login page if validation fails
         model.addAttribute("errorMessage", "Invalid email, password, or role.");
         return "login";
     }
@@ -57,12 +58,13 @@ public class AuthController {
                            @RequestParam String password,
                            @RequestParam Role role,
                            Model model) {
-
+        // prevent users from creating admin accounts
         if (role == Role.ADMIN) {
             model.addAttribute("errorMessage", "Admin account cannot be created here.");
             return "signup";
         }
 
+        // check if email already exists
         if (userRepository.findByEmail(email).isPresent()) {
             model.addAttribute("errorMessage", "Email already exists.");
             return "signup";
@@ -74,7 +76,7 @@ public class AuthController {
             user.setEmail(email);
             user.setPassword(password);
             user.setRole(role);
-            user.setTotalPoints(0);
+            user.setTotalPoints(0); // initialize points to zero
 
             userRepository.save(user);
 

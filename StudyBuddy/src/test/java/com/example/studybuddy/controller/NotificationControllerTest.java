@@ -20,28 +20,45 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class NotificationControllerTest {
 
-    @Mock NotificationRepository repo;
-    @Mock HttpSession session;
-    @Mock Model model;
-    @InjectMocks NotificationController controller;
+    @Mock
+    NotificationRepository repo;
+    @Mock
+    HttpSession session;
+    @Mock
+    Model model;
+    @InjectMocks
+    NotificationController controller;
 
     @Test
     void studentNotifications_success() {
-        User u = new User(); u.setRole(Role.STUDENT);
 
+        // create student user
+        User u = new User();
+        u.setRole(Role.STUDENT);
+
+        // mock logged-in user
         when(session.getAttribute("loggedUser")).thenReturn(u);
+
+        // mock notifications data
         when(repo.findByUser(u)).thenReturn(List.of(new Notification()));
 
+        // call method
         String view = controller.studentNotifications(session, model);
 
+        // check correct view
         assertEquals("student/notifications", view);
+
+        // verify data sent to view
         verify(model).addAttribute(eq("notifications"), any());
     }
 
     @Test
     void studentNotifications_redirect() {
+
+        // mock no user logged in
         when(session.getAttribute("loggedUser")).thenReturn(null);
 
+        // check redirect to login
         assertEquals("redirect:/login", controller.studentNotifications(session, model));
     }
 }

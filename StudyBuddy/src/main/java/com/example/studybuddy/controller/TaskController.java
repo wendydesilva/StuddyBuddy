@@ -32,6 +32,7 @@ public class TaskController {
     private final GoalController goalController;
     private final NotificationRepository notificationRepository;
 
+    // inject repositories and controllers
     public TaskController(TaskRepository taskRepository,
                           GoalRepository goalRepository,
                           UserRepository userRepository,
@@ -48,11 +49,19 @@ public class TaskController {
 
     @GetMapping("/student/tasks")
     public String studentTasks(HttpSession session, Model model) {
+
+        // get logged-in student
         User student = (User) session.getAttribute("loggedUser");
+
+        // allow only student
         if (student == null || student.getRole() != Role.STUDENT) return "redirect:/login";
 
+        // fetch student tasks
         List<Task> tasks = taskRepository.findByStudent_UserId(student.getUserId());
+
+        // send to view
         model.addAttribute("tasks", tasks);
+
         return "student/tasks";
     }
 
@@ -62,15 +71,24 @@ public class TaskController {
                              @RequestParam String submissionNote,
                              HttpSession session,
                              RedirectAttributes ra) {
+
+        // get logged-in student
         User student = (User) session.getAttribute("loggedUser");
+
+        // allow only student
         if (student == null || student.getRole() != Role.STUDENT) return "redirect:/login";
 
+        // find task
         Task task = taskRepository.findById(taskId).orElse(null);
+
         if (task != null && task.getStudent().getUserId().equals(student.getUserId())) {
+
+            // update task status
             task.setStatus(TaskStatus.SUBMITTED);
             task.setSubmissionNote(submissionNote);
             taskRepository.save(task);
 
+            // notify coach
             if (task.getCoach() != null) {
                 Notification coachNotification = new Notification();
                 coachNotification.setUser(task.getCoach());
@@ -88,19 +106,29 @@ public class TaskController {
     public String coachGoalTasks(@PathVariable Long goalId,
                                  HttpSession session,
                                  Model model) {
+
+        // get logged-in coach
         User coach = (User) session.getAttribute("loggedUser");
+
+        // allow only coach
         if (coach == null || coach.getRole() != Role.COACH) return "redirect:/login";
 
+        // find goal
         Goal goal = goalRepository.findById(goalId).orElse(null);
         if (goal == null) return "redirect:/coach/goals";
 
+        // ensure goal belongs to coach
         if (goal.getCoach() == null || !goal.getCoach().getUserId().equals(coach.getUserId())) {
             return "redirect:/coach/goals";
         }
 
+        // fetch tasks
         List<Task> tasks = taskRepository.findByGoal(goal);
+
+        // send to view
         model.addAttribute("goal", goal);
         model.addAttribute("tasks", tasks);
+
         return "coach/tasks";
     }
 
@@ -112,16 +140,23 @@ public class TaskController {
                              @RequestParam String dueDate,
                              HttpSession session,
                              RedirectAttributes ra) {
+
+        // get logged-in coach
         User coach = (User) session.getAttribute("loggedUser");
+
+        // allow only coach
         if (coach == null || coach.getRole() != Role.COACH) return "redirect:/login";
 
+        // find goal
         Goal goal = goalRepository.findById(goalId).orElse(null);
         if (goal == null) return "redirect:/coach/goals";
 
+        // ensure goal belongs to coach
         if (goal.getCoach() == null || !goal.getCoach().getUserId().equals(coach.getUserId())) {
             return "redirect:/coach/goals";
         }
 
+        // create new task
         Task task = new Task();
         task.setTitle(title);
         task.setDescription(description);
@@ -133,6 +168,7 @@ public class TaskController {
 
         taskRepository.save(task);
 
+        // notify student
         Notification studentNotification = new Notification();
         studentNotification.setUser(goal.getStudent());
         studentNotification.setMessage("A new task has been assigned to you: " + task.getTitle());
@@ -148,22 +184,31 @@ public class TaskController {
                                @RequestParam Integer points,
                                HttpSession session,
                                RedirectAttributes ra) {
+
+        // get logged-in coach
         User coach = (User) session.getAttribute("loggedUser");
+
+        // allow only coach
         if (coach == null || coach.getRole() != Role.COACH) return "redirect:/login";
 
+        // find task
         Task task = taskRepository.findById(taskId).orElse(null);
         if (task == null) return "redirect:/coach/goals";
 
+        // ensure task belongs to coach
         if (!task.getCoach().getUserId().equals(coach.getUserId())) {
             return "redirect:/coach/goals";
         }
 
+        // mark task completed
         task.setStatus(TaskStatus.COMPLETED);
         taskRepository.save(task);
 
+        // update goal progress
         Goal goal = task.getGoal();
         goalController.updateGoalProgress(goal);
 
+        // assign reward points
         if (points != null && points > 0) {
             Reward reward = new Reward();
             reward.setStudent(task.getStudent());
@@ -178,6 +223,7 @@ public class TaskController {
             userRepository.save(student);
         }
 
+        // notify student
         Notification studentNotification = new Notification();
         studentNotification.setUser(task.getStudent());
         studentNotification.setMessage("Your task was marked completed: " + task.getTitle());
@@ -192,19 +238,27 @@ public class TaskController {
     public String rejectTask(@RequestParam Long taskId,
                              HttpSession session,
                              RedirectAttributes ra) {
+
+        // get logged-in coach
         User coach = (User) session.getAttribute("loggedUser");
+
+        // allow only coach
         if (coach == null || coach.getRole() != Role.COACH) return "redirect:/login";
 
+        // find task
         Task task = taskRepository.findById(taskId).orElse(null);
         if (task == null) return "redirect:/coach/goals";
 
+        // ensure task belongs to coach
         if (!task.getCoach().getUserId().equals(coach.getUserId())) {
             return "redirect:/coach/goals";
         }
 
+        // reject task
         task.setStatus(TaskStatus.REJECTED);
         taskRepository.save(task);
 
+        // notify student
         Notification studentNotification = new Notification();
         studentNotification.setUser(task.getStudent());
         studentNotification.setMessage("Your submitted task was rejected: " + task.getTitle());

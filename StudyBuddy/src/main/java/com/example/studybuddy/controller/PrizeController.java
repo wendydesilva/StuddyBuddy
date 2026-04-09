@@ -24,6 +24,7 @@ public class PrizeController {
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
 
+    // inject repositories
     public PrizeController(PrizeRepository prizeRepository,
                            NotificationRepository notificationRepository,
                            UserRepository userRepository) {
@@ -34,12 +35,18 @@ public class PrizeController {
 
     @GetMapping("/student/prizes")
     public String studentPrizes(HttpSession session, Model model) {
+
+        // get logged-in student
         User student = (User) session.getAttribute("loggedUser");
+
+        // allow only student
         if (student == null || student.getRole() != Role.STUDENT) return "redirect:/login";
 
+        // calculate available points
         Integer usedPoints = prizeRepository.getTotalApprovedPointsUsed(student);
         int availablePoints = student.getTotalPoints() - (usedPoints == null ? 0 : usedPoints);
 
+        // send data to view
         model.addAttribute("prizes", prizeRepository.findByStudent(student));
         model.addAttribute("totalEarned", student.getTotalPoints());
         model.addAttribute("availablePoints", availablePoints);
@@ -54,17 +61,24 @@ public class PrizeController {
                                @RequestParam Integer pointsRequired,
                                HttpSession session,
                                RedirectAttributes ra) {
+
+        // get logged-in student
         User student = (User) session.getAttribute("loggedUser");
+
+        // allow only student
         if (student == null || student.getRole() != Role.STUDENT) return "redirect:/login";
 
+        // check available points
         Integer usedPoints = prizeRepository.getTotalApprovedPointsUsed(student);
         int availablePoints = student.getTotalPoints() - (usedPoints == null ? 0 : usedPoints);
 
+        // not enough points
         if (availablePoints < pointsRequired) {
             ra.addFlashAttribute("errorMessage", "Not enough points for this prize.");
             return "redirect:/student/prizes";
         }
 
+        // create new prize request
         Prize prize = new Prize();
         prize.setPrizeName(prizeName);
         prize.setDescription(description);
@@ -75,6 +89,7 @@ public class PrizeController {
 
         prizeRepository.save(prize);
 
+        // notify admins
         List<User> admins = userRepository.findByRole(Role.ADMIN);
         for (User admin : admins) {
             Notification adminNotification = new Notification();
@@ -89,11 +104,17 @@ public class PrizeController {
 
     @GetMapping("/admin/prizes")
     public String adminPrizes(HttpSession session, Model model) {
+
+        // get logged-in admin
         User admin = (User) session.getAttribute("loggedUser");
+
+        // allow only admin
         if (admin == null || admin.getRole() != Role.ADMIN) return "redirect:/login";
 
+        // send prize data
         model.addAttribute("pendingPrizes", prizeRepository.findByStatus(Prize.PrizeStatus.PENDING));
         model.addAttribute("allPrizes", prizeRepository.findAll());
+
         return "admin/prizes";
     }
 
@@ -102,15 +123,23 @@ public class PrizeController {
     public String approvePrize(@RequestParam Long prizeId,
                                HttpSession session,
                                RedirectAttributes ra) {
+
+        // get logged-in admin
         User admin = (User) session.getAttribute("loggedUser");
+
+        // allow only admin
         if (admin == null || admin.getRole() != Role.ADMIN) return "redirect:/login";
 
+        // find prize
         Prize prize = prizeRepository.findById(prizeId).orElse(null);
+
         if (prize != null) {
+            // approve prize
             prize.setStatus(Prize.PrizeStatus.APPROVED);
             prize.setAwardedDate(LocalDate.now());
             prizeRepository.save(prize);
 
+            // notify student
             Notification studentNotification = new Notification();
             studentNotification.setUser(prize.getStudent());
             studentNotification.setMessage("Your prize request was approved: " + prize.getPrizeName());
@@ -127,15 +156,23 @@ public class PrizeController {
                               @RequestParam(required = false) String adminNote,
                               HttpSession session,
                               RedirectAttributes ra) {
+
+        // get logged-in admin
         User admin = (User) session.getAttribute("loggedUser");
+
+        // allow only admin
         if (admin == null || admin.getRole() != Role.ADMIN) return "redirect:/login";
 
+        // find prize
         Prize prize = prizeRepository.findById(prizeId).orElse(null);
+
         if (prize != null) {
+            // reject prize
             prize.setStatus(Prize.PrizeStatus.REJECTED);
             prize.setAdminNote(adminNote == null || adminNote.isBlank() ? "Request rejected." : adminNote);
             prizeRepository.save(prize);
 
+            // notify student
             Notification studentNotification = new Notification();
             studentNotification.setUser(prize.getStudent());
             studentNotification.setMessage("Your prize request was rejected: " + prize.getPrizeName());
@@ -146,6 +183,7 @@ public class PrizeController {
         return "redirect:/admin/prizes";
     }
 
+    // prize options
     private List<PrizeTier> getPrizeTiers() {
         return List.of(
                 new PrizeTier("Movie Ticket", "Free movie ticket at any cinema", 50),

@@ -1,12 +1,13 @@
 package com.example.studybuddy.entity;
 
+import com.example.studybuddy.model.Student_SE;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Student {
+public class Student extends Student_SE {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //written close to the unique key which is the id
     private long id;
@@ -15,7 +16,7 @@ public class Student {
     private String course;
 
     //Getters
-    public long getId() {
+    public Long getId() {
         return id;
     }
     public String getFullName() {

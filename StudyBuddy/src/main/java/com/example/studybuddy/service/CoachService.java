@@ -2,10 +2,8 @@ package com.example.studybuddy.service;
 
 import com.example.studybuddy.entity.Coach;
 import com.example.studybuddy.entity.Event;
-import com.example.studybuddy.repository.CoachRepository;
-import com.example.studybuddy.repository.CoachSessionRepository;
-import com.example.studybuddy.repository.EventRepository;
-import com.example.studybuddy.repository.StudentRepository;
+import com.example.studybuddy.model.Session;
+import com.example.studybuddy.repository.*;
 import com.example.studybuddy.session.CoachSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +15,7 @@ public class CoachService {
     @Autowired
     private CoachRepository coachRepository;
     @Autowired
-    private CoachSessionRepository coachSessionRepository;
+    private SessionRepository sessionRepository;
     @Autowired
     private EventRepository eventRepository;
 
@@ -27,18 +25,18 @@ public class CoachService {
     }
 
     //getting all sessions for weekly schedule
-    public List<CoachSession> getSessionsByCoach(long coachId){
-        return coachSessionRepository.findByCoachId(coachId);
+    public List<Session> getSessionsByCoach(long coachId){
+        return sessionRepository.findAll();
     }
 
     //total number of classes
     public long getTotalClasses(long coachId){
-        return coachSessionRepository.countByCoachId(coachId);
+        return sessionRepository.count();
     }
 
     //total number of students
     public long getTotalStudents(long coachId){
-        return coachSessionRepository.countByCoachIdAndStudentIsNotNull(coachId);
+        return sessionRepository.count();
     }
 
     //generating pay = total sessions confirmed * hourly rate

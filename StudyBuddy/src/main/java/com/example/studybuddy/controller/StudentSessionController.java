@@ -1,5 +1,6 @@
 package com.example.studybuddy.controller;
 
+import com.example.studybuddy.entity.Student;
 import com.example.studybuddy.model.Payment;
 import com.example.studybuddy.model.Session;
 import com.example.studybuddy.model.SessionPlan;
@@ -39,7 +40,7 @@ public class StudentSessionController {
     @GetMapping
 
     public String viewSessions(Model model){
-        Student_SE student = studentRepo.findAll().get(0);
+        Student student = studentRepo.findAll().get(0);
         List<SessionPlan> plans = planRepo.findAll();
         Session currentSession = sessionRepo.findByStudentId(student.getId())
                 .stream()
@@ -98,7 +99,7 @@ public class StudentSessionController {
     @GetMapping("/payment")
     public String paymentPage(Model model) {
 
-        Student_SE student = studentRepo.findAll().get(0);
+        Student student = studentRepo.findAll().get(0);
         model.addAttribute("student", student);
 
         return "student-payment";

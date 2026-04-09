@@ -27,8 +27,8 @@ VALUES ('Admin', 'admin@test.com', 'pass123', 'ADMIN', 0);
 --                          CONSTRAINT fk_student FOREIGN KEY (student_id) REFERENCES STUDENT(id)
 -- --                          CONSTRAINT fk_plan FOREIGN KEY (plan_id) REFERENCES SESSION_PLAN(id)
 -- );
-INSERT INTO STUDENT_SE (id, name, email, course,dob)
-VALUES (1, 'Wendy', 'wendy@example.com', 'BSc Computer Science','2026-03-18T15:30');
+INSERT INTO STUDENT_SE (dtype, id, name, email, course,dob)
+VALUES ('Student',1, 'Wendy', 'wendy@example.com', 'BSc Computer Science','2026-03-18T15:30');
 INSERT INTO SESSION_PLAN (id, name, price, duration_minutes)
 VALUES (1, 'Basic', 0, 30),
        (2, 'Standard', 20, 60),

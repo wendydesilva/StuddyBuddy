@@ -7,28 +7,376 @@
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
     <style>
-        .menu-buttons a {
-            margin: 8px 8px 8px 0;
-        }
+        body{
+            display: flex;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f6f9;
+            color: #1e293b;
+            min-height: 100vh;
+            & .side-bar {
+                width: 240px;
+                height: 100vh; /* means 100% of the viewport height, always fills the screen */
+                position: fixed; /* keeps it in place when the page scrolls */
+                background: #1e293b;
+                color: white;
+                left: 0;
+                top: 0;
+                padding: 25px 20px;
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
 
-        .logout-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
+                h3 {
+                    font-size: 16px;
+                    font-weight: 500;
+                    /*margin-bottom: 2px;*/
+                }
+
+                hr {
+                    border: 0.5px solid #475569;
+                    margin: 10px 0;
+                }
+
+                .label {
+                    font-size: 11px;
+                    color: #94a3b8;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    margin-bottom: 2px;
+                }
+
+                .value {
+                    font-size: 13px;
+                    color: #cbd5e1;
+                    margin-bottom: 10px;
+                }
+
+                .logout-btn {
+                    margin-top: auto;
+                    padding: 8px 12px;
+                    border: none;
+                    background: #ef4444;
+                    color: white;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    width: 100%;
+                    text-align: center;
+                    text-decoration: none;
+                    font-size: 13px;
+                    display: block;
+
+                    :hover {
+                        background: #dc2626;
+                        color: white;
+                    }
+                }
+            }
+            & .main-content {
+                margin-left: 240px;
+                width: calc(100% - 240px);
+                display: flex;
+                flex-direction: column;
+
+                & .menu-buttons {
+                    background: white;
+                    border-bottom: 1px solid #ddd;
+                    display: flex;
+                    gap: 5px;
+                    padding: 12px 25px;
+                    position: sticky;
+                    top: 0;
+                    z-index: 10;
+
+                    & a {
+                        text-decoration: none;
+                        color: #1e293b;
+                        font-weight: 500;
+                        font-size: 13px;
+                        padding: 6px 14px;
+                        border-radius: 6px;
+
+                        &:hover {
+                            background: #f1f5f9;
+                            color: #2563eb;
+                        }
+                        .active{
+                            background: #2563eb;
+                            color: white;
+                        }
+                    }
+                }
+                .page-body{
+                    padding: 25px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 25px;
+                }
+                .clients-title{
+                    font-size: 16px;
+                    font-weight: 500;
+                    margin-bottom: 14px;
+                    padding-bottom: 8px;
+                    border: 0.5px solid #e2e8f0;
+                }
+                .tool-bar{
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    margin-bottom: 16px;
+                    flex-wrap: wrap;
+                    form{
+                        display: flex;
+                        gap: 8px;
+                        flex: 1;
+                        input{
+                            padding: 8px 12px;
+                            border: 0.5px solid #e2e8f0;
+                            border-radius: 12px;
+                            font-size: 13px;
+                            flex: 1;
+                            outline: none;
+                            :focus{
+                                border-color: #2563eb;
+                            }
+                        }
+                        .btn-search {
+                            background: #2563eb;
+                            color: white;
+                            border: none;
+                            padding: 8px 16px;
+                            border-radius: 6px;
+                            font-size: 13px;
+                            cursor: pointer;
+                            :hover{
+                                background: #1d4ed8;
+                            }
+                        }
+                    }
+                    .btn-add {
+                        background: #10b981;
+                        color: white;
+                        border: none;
+                        padding: 8px 16px;
+                        border-radius: 6px;
+                        font-size: 13px;
+                        cursor: pointer;
+                        white-space: nowrap;
+                        text-decoration: none;
+                        display: inline-block;
+                        :hover{
+                            background: #059669;
+                            color: white;
+                        }
+                    }
+                }
+                & .client-table-wrap{
+                    background: white;
+                    border-radius: 12px;
+                    border: 0.5px solid #e2e8f0;
+                    overflow: hidden;
+
+                    tr:last-child td{border-bottom: none;}
+                    tr:nth-child(even){background: #f9fafb;}
+
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+
+                        th {
+                            background: #2563eb;
+                            color: white;
+                            padding: 12px 16px;
+                            text-align: left;
+                            font-size: 13px;
+                            font-weight: 500;
+                        }
+                        td {
+                            padding: 12px 16px;
+                            font-size: 13px;
+                            color: #334155;
+                            border: 0.5px solid #f1f5f9;
+                        }
+                        tr{
+                            .status-badge{
+                                font-size: 11px;
+                                padding: 3px 10px;
+                                border-radius: 20px;
+                                display: inline-block;
+                                .active{
+                                    background: #dcfce7;
+                                    color: #166534;
+                                }
+                                .inactive{
+                                    background: #fee2e2;
+                                    color: #991b1b;
+                                }
+                            }
+                        }
+
+                        .group-id {
+                            font-size: 11px;
+                            color: #94a3b8;
+                        }
+                        .member-badge {
+                            background: #dbeafe;
+                            color: #1d4ed8;
+                            font-size: 11px;
+                            padding: 3px 10px;
+                            border-radius: 20px;
+                            display: inline-block;
+                        }
+                    }
+                    .btn-view{
+                        font-size: 13px;
+                        padding: 4px 10px;
+                        border-radius: 5px;
+                        background: #f1f5f9;
+                        color: white;
+                        text-decoration: none;
+                        border: 0.5px solid #e2e8f0;
+                        :hover{
+                            background: #e2e8f0;
+                            color: #1e293b;
+                        }
+                    }
+                    .empty-students{
+                        font-size: 13px;
+                        color: #94a3b8;
+                        text-align: center;
+                        padding: 20px 0;
+                    }
+                }
+                & .add-form {
+                    font-size: 14px;
+                    border-radius: 12px;
+                    border: 0.5px solid #e2e8f0;
+                    padding: 20px;
+                    h4 {
+                        font-size: 14px;
+                        font-weight: 500;
+                        margin-bottom: 14px;
+                        .form-row {
+                            display: flex;
+                            gap: 12px;
+                            flex-wrap: wrap;
+                            margin-bottom: 12px;
+                            input {
+                                flex: 1;
+                                min-width: 160px;
+                                padding: 8px 12px;
+                                border: 0.5px solid #e2e8f0;
+                                font-size: 13px;
+                                outline: none;
+                                :focus{border-color: #2563eb;}
+                            }
+                        }
+
+                        input {
+                            width: 100%;
+                            padding: 8px 12px;
+                            border: 0.5px solid #e2e8f0;
+                            border-radius: 6px;
+                            font-size: 13px;
+                            color: #1e293b;
+                            margin-bottom: 10px;
+                            outline: none;
+                            :focus{
+                                border-color: #2563eb;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .btn-submit {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 9px 20px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            :hover{
+                background: #1d4ed8;
+            }
         }
     </style>
 </head>
 
 <body class="container" style="position: relative;">
 
-<a href="/logout" class="btn btn-default logout-btn">Logout</a>
+<!-- The side content of the page -->
+<div class="side-bar">
+    <h3>Hey, <span th:text="${admin.fullName}">Administrator</span></h3>
+    <hr>
+    <p class="label">Role</p>
+    <p class="value">System Admin</p>
+    <p class="label">Total Students</p>
+    <p class="label" th:text="${totalStudents}">0</p>
 
-<h2>Welcome, <span th:text="${user.name}"></span>!</h2>
-<hr>
+    <a href="/logout" class="btn btn-default logout-btn">Logout</a>
+</div>
 
-<div class="menu-buttons">
-    <a th:href="@{/admin/prizes}" class="btn btn-primary">Prize Management</a>
-    <a th:href="@{/admin/notifications}" class="btn btn-warning">Notifications</a>
+<!--<h2>Welcome, <span th:text="${user.name}"></span>!</h2>-->
+<!--<hr>-->
+<!-- Main contents -->
+<div class="main-content">
+    <!-- navigation bar -->
+    <div class="menu-buttons">
+        <a href="/admin/manage" class="active">Accounts</a>
+        <a href="/admin/reports">Progress Reports</a>
+        <a th:href="@{/admin/prizes}" class="btn btn-primary">Prize Management</a>
+        <a th:href="@{/admin/notifications}" class="btn btn-warning">Notifications</a>
+    </div>
+
+    <div class="page-body">
+        <div>
+            <p class="clients-title">Clients</p>
+            <div class="tool-bar">
+                <form th:action="@{/admin/manage}" method="get">
+                    <input type="text" name="Search" placeholder="Search by name......" th:value="${search}"/>
+                    <button type="submit" class="btn-search">Search</button>
+                </form>
+                <a href="#add-client" class="btn-add">Add Client</a>
+            </div>
+            <div class="client-table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Client</th>
+                            <th>Program</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Profile</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="student : ${students}">
+                            <td th:text="${student.fullName}">Name</td>
+                            <td th:text="${student.course}">Course</td>
+                            <td th:text="${student.email}">Email</td>
+                            <td><span class="status-badge">Active</span></td>
+                            <td><a th:href="@{/admin/manage/student/{id}(id=${student.id})}" class="btn-view">View</a> </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(students)}">
+                            <td colspan="5" class="empty-students">No clients found</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="add-form" id="add-client">
+            <h4>Add a new client</h4>
+            <form th:action="@{/admin/manage/add}" method="post">
+                <div class="form-row">
+                    <input type="text" name="fullName" placeholder="Full Name" required/>
+                    <input type="email" name="email" placeholder="Email" required/>
+                    <input type="text" name="course" placeholder="Program /Course" required/>
+                </div>
+                <button type="submit" class="btn-submit">Add Client</button>
+            </form>
+        </div>
+    </div>
 </div>
 
 </body>

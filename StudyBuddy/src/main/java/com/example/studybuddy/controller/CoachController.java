@@ -2,6 +2,7 @@ package com.example.studybuddy.controller;
 
 import com.example.studybuddy.entity.Coach;
 import com.example.studybuddy.entity.Event;
+import com.example.studybuddy.model.Session;
 import com.example.studybuddy.service.CoachService;
 import com.example.studybuddy.service.StudentService;
 import com.example.studybuddy.session.CoachSession;
@@ -23,7 +24,7 @@ public class CoachController {
     @GetMapping("/coach/home/{id}")
     public String coachHomePage(@PathVariable long id, Model model){
         Coach coach = coachService.getCoach(id);
-        List<CoachSession> sessions = coachService.getSessionsByCoach(id);
+        List<Session> sessions = coachService.getSessionsByCoach(id);
         List<Event> events = coachService.getUpcomingEvent(id);
         long totalClasses = coachService.getTotalClasses(id);
         long totalStudents = coachService.getTotalStudents(id);

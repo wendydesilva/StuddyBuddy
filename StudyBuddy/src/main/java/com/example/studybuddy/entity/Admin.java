@@ -1,34 +1,31 @@
 package com.example.studybuddy.entity;
 
-import com.example.studybuddy.model.Student_SE;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Student extends Student_SE {
+public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //written close to the unique key which is the id
     private long id;
     private String fullName;
     private String email;
-    private String course;
+    private String dob;
 
     //Getters
-    public Long getId() {
+    public long getId() {
         return id;
     }
     public String getFullName() {
         return fullName;
     }
-
     public String getEmail() {
         return email;
     }
-
-    public String getCourse() {
-        return course;
+    public String getDob() {
+        return dob;
     }
 
     //Setters
@@ -38,12 +35,10 @@ public class Student extends Student_SE {
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public void setCourse(String course) {
-        this.course = course;
+    public void setDob(String dob) {
+        this.dob = dob;
     }
 }

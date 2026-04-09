@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <style>
+        body{
+            display: flex;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f6f9;
+            color: #1e293b;
+            min-height: 100vh;
+            & .side-bar {
+                width: 240px;
+                height: 100vh; /* means 100% of the viewport height, always fills the screen */
+                position: fixed; /* keeps it in place when the page scrolls */
+                background: #1e293b;
+                color: white;
+                left: 0;
+                top: 0;
+                padding: 25px 20px;
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+
+                h3 {
+                    font-size: 16px;
+                    font-weight: 500;
+                    margin-bottom: 2px;
+                }
+
+                hr {
+                    border: 0.5px solid #475569;
+                    margin: 10px 0;
+                }
+
+                .label {
+                    font-size: 11px;
+                    color: #94a3b8;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    margin-bottom: 2px;
+                }
+
+                .value {
+                    font-size: 13px;
+                    color: #cbd5e1;
+                    margin-bottom: 10px;
+                }
+
+                .logout-btn {
+                    margin-top: auto;
+                    padding: 8px 12px;
+                    border: none;
+                    background: #ef4444;
+                    color: white;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    width: 100%;
+                    text-align: center;
+                    text-decoration: none;
+                    font-size: 13px;
+                    display: block;
+
+                    :hover {
+                        background: #dc2626;
+                        color: white;
+                    }
+                }
+            }
+
+            & .main-content {
+                margin-left: 240px;
+                width: calc(100% - 240px);
+                display: flex;
+                flex-direction: column;
+
+                & .menu-buttons {
+                    background: white;
+                    border-bottom: 1px solid #ddd;
+                    display: flex;
+                    gap: 5px;
+                    padding: 15px 20px;
+                    position: sticky;
+                    top: 0;
+                    z-index: 10;
+
+                    & a {
+                        text-decoration: none;
+                        color: #1e293b;
+                        font-weight: 500;
+                        font-size: 13px;
+                        padding: 6px 14px;
+                        border-radius: 6px;
+
+                        &:hover {
+                            background: #f1f5f9;
+                            color: #2563eb;
+                        }
+                        .active{
+                            background: #2563eb;
+                            color: white;
+                        }
+                    }
+                }
+                .page-body{
+                    padding: 25px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 25px;
+                }
+                .sg-title{
+                    font-size: 16px;
+                    font-weight: 500;
+                    margin-bottom: 14px;
+                    padding-bottom: 8px;
+                    border: 0.5px solid #e2e8f0;
+                }
+
+                & .group-table-wrap{
+                    background: white;
+                    border-radius: 12px;
+                    border: 0.5px solid #e2e8f0;
+                    overflow: hidden;
+
+                    tr:last-child td{border-bottom: none;}
+                    tr:nth-child(even){background: #f9fafb;}
+
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+
+                        th {
+                            background: #2563eb;
+                            color: white;
+                            padding: 12px 16px;
+                            text-align: left;
+                            font-size: 13px;
+                            font-weight: 500;
+
+                        }
+                        td {
+                            padding: 12px 16px;
+                            font-size: 13px;
+                            color: #334155;
+                            border: 0.5px solid #f1f5f9;
+                        }
+                        tr{
+                            .empty-groups{
+                                font-size: 13px;
+                                color: #94a3b8;
+                                text-align: center;
+                                padding: 20px 0;
+                            }
+                        }
+
+                        .group-id {
+                            font-size: 11px;
+                            color: #94a3b8;
+                        }
+                        .member-badge {
+                            background: #dbeafe;
+                            color: #1d4ed8;
+                            font-size: 11px;
+                            padding: 3px 10px;
+                            border-radius: 20px;
+                            display: inline-block;
+                        }
+                    }
+                }
+                & .actions {
+                    display: flex;
+                    gap: 16px;
+                    flex-wrap: wrap;
+
+                    .actions-card {
+                        background: white;
+                        border-radius: 12px;
+                        border: 0.5px solid #e2e8f0;
+                        padding: 20px;
+                        flex: 1;
+                        min-width: 240px;
+
+                        h4 {
+                            font-size: 14px;
+                            font-weight: 500;
+                            margin-bottom: 14px;
+                            color: white;
+                        }
+
+                        input, select {
+                            width: 100%;
+                            padding: 8px 12px;
+                            border: 0.5px solid #e2e8f0;
+                            border-radius: 6px;
+                            font-size: 13px;
+                            color: #1e293b;
+                            margin-bottom: 10px;
+                            outline: none;
+                            :focus{
+                                border-color: #2563eb;
+                            }
+                        }
+                        .btn-create {
+                            background: #2563eb;
+                            color: white;
+                            border: none;
+                            padding: 8px 16px;
+                            border-radius: 6px;
+                            font-size: 13px;
+                            cursor: pointer;
+                            width: 100%;
+                            :hover{
+                                background: #1d4ed8;
+                            }
+                        }
+
+                        .btn-join {
+                            background: #10b981;
+                            color: white;
+                            border: none;
+                            padding: 8px 16px;
+                            border-radius: 6px;
+                            font-size: 13px;
+                            cursor: pointer;
+                            width: 100%;
+                            :hover{
+                                background: #059669;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- The side content of the page -->
+<div class="side-bar">
+
+    <h3>Hey, <span th:text="${student.fullName}">Student</span></h3>
+    <hr>
+
+    <p class="label">Email</p>
+    <p class="value" th:text="${student.email}">student@email.com</p>
+    <p class="label">Course</p>
+    <p class="label" th:text="${student.course}">Course Name</p>
+
+    <a href="/logout" class="btn btn-default logout-btn">Logout</a>
+</div>
+
+<div class="main-content">
+    <!-- navigation bar -->
+    <div class="menu-buttons">
+        <a th:href="@{/student/home/{id}(id=${coach.id})}">Home</a>
+        <a href="/student/goals" class="btn btn-primary">View Goals</a>
+        <a th:href="@{/student/sessions}">Session</a>
+        <a href="#" class="active">Study Groups</a>
+        <a href="/student/tasks" class="btn btn-info">My Tasks</a>
+        <a href="/student/rewards" class="btn btn-warning">View Rewards</a>
+        <a href="/student/prizes" class="btn btn-success">My Prizes</a>
+        <a href="/student/notifications" class="btn btn-danger">Notifications</a>
+    </div>
+
+    <div class="page-body">
+        <div>
+            <p class="sg-title">Groups</p>
+            <div class="group-table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Group Name</th>
+                            <th>ID</th>
+                            <th>Members</th>
+                            <th>Created</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="group : ${myGroups}">
+                            <td th:text="${group.groupName}">Group Name</td>
+                            <td><span class="group-id" th:text="${group.id}">0000</span></td>
+                            <td><span class="member-badge" th:text="${group.memberCount}">0</span></td>
+                            <td th:text="${group.createdDate}">Date</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(myGroups)}">
+                            <td colspan="4" class="empty-groups">You haven't joined any groups</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="actions">
+            <!-- new group -->
+            <div class="actions-card">
+                <h4>Create a new study group</h4>
+                <form th:action="@{/student/groups/{id}/create(id=${studentId})}" method="post">
+                    <input type="text" name="groupName" placeholder="Enter group name" required/>
+                    <button type="submit" class="btn-create">Create Group</button>
+                </form>
+            </div>
+
+            <!-- join an existing group -->
+            <div class="actions-card">
+                <h4>Join an existing group</h4>
+                <form th:action="@{/student/groups/{id}/join(id=${studentId})}" method="post">
+                    <select name="groupId" required>
+                        <option value="">Select a Group</option>
+                        <option th:each="group : ${allGroups}"
+                                th:value="${group.id}"
+                                th:text="${group.groupName + ' (' + group.memberCount + ' members)'}">
+                            Group
+                        </option>
+                    </select>
+                    <button type="submit" class="btn-join">Join Group</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

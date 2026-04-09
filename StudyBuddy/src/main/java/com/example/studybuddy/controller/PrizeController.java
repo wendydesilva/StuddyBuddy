@@ -94,7 +94,7 @@ public class PrizeController {
         for (User admin : admins) {
             Notification adminNotification = new Notification();
             adminNotification.setUser(admin);
-            adminNotification.setMessage("New prize request from " + student.getName() + ": " + prize.getPrizeName());
+            adminNotification.setMessage("New prize request from " + student.getFullName() + ": " + prize.getPrizeName());
             notificationRepository.save(adminNotification);
         }
 

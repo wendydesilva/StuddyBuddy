@@ -12,60 +12,38 @@ public class HomeController {
 
     @GetMapping("/")
     public String rootRedirect() {
-        // redirect user to login page
         return "redirect:/login";
     }
 
     @GetMapping("/student/home")
     public String studentHome(HttpSession session, Model model) {
-
-        // get logged-in user
         User user = (User) session.getAttribute("loggedUser");
-
-        // allow only student
         if (user == null || user.getRole() != Role.STUDENT) {
             return "redirect:/login";
         }
 
-        // send user data to view
-        model.addAttribute("user", user);
-
+        model.addAttribute("student", user);
         return "student/home";
     }
 
     @GetMapping("/coach/home")
     public String coachHome(HttpSession session, Model model) {
-
-        // get logged-in user
         User user = (User) session.getAttribute("loggedUser");
-
-        // allow only coach
         if (user == null || user.getRole() != Role.COACH) {
             return "redirect:/login";
         }
 
-        // send user data to view
-        model.addAttribute("user", user);
-
+        model.addAttribute("coach", user);
         return "coach/home";
     }
 
     @GetMapping("/admin/home")
     public String adminHome(HttpSession session, Model model) {
-
-        // get logged-in user
         User user = (User) session.getAttribute("loggedUser");
-
-        // allow only admin
         if (user == null || user.getRole() != Role.ADMIN) {
             return "redirect:/login";
         }
-
-        // send user data to view
-        model.addAttribute("user", user);
-
+        model.addAttribute("admin", user);
         return "admin/home";
     }
-
-
 }

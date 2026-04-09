@@ -101,7 +101,7 @@ public class GoalController {
             Notification coachNotification = new Notification();
             coachNotification.setUser(goal.getCoach());
             coachNotification.setMessage("New goal request from "
-                    + student.getName() + ": " + goal.getTitle());
+                    + student.getFullName() + ": " + goal.getTitle());
 
             notificationRepository.save(coachNotification);
         }

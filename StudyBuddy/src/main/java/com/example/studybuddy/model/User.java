@@ -8,69 +8,75 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId; // primary key
+    private Long userId;
 
     @Column(nullable = false)
-    private String name; // user name
+    private String name;
 
     @Column(nullable = false, unique = true)
-    private String email; // unique email
+    private String email;
 
     @Column(nullable = false)
-    private String password; // user password
+    private String password;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role; // user role (student, coach, admin)
+    private Role role;
 
     @Column(nullable = false)
-    private Integer totalPoints = 0; // accumulated points
+    private Integer totalPoints = 0;
 
-    public Long getUserId() {
-        return userId;
+    @Column
+    private String course;
+
+    @Column
+    private String subjectExpertise;
+
+    @Column
+    private String experienceYears;
+
+    @Column
+    private String dob;
+    public User() {}
+
+
+    public String getFullName() {
+        return this.name;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public Long getId() {
+        return this.userId;
     }
 
-    public String getName() {
-        return name;
-    }
+// --- GETTERS AND SETTERS ---
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public String getDob() { return dob; }
+    public void setDob(String dob) { this.dob = dob; }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getSubjectExpertise() { return subjectExpertise; }
+    public void setSubjectExpertise(String subjectExpertise) { this.subjectExpertise = subjectExpertise; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public String getExperienceYears() { return experienceYears; }
+    public void setExperienceYears(String experienceYears) { this.experienceYears = experienceYears; }
 
-    public String getPassword() {
-        return password;
-    }
+    public Long getUserId() { return userId; }
+    public void setUserId(Long userId) { this.userId = userId; }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public Role getRole() {
-        return role;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public Integer getTotalPoints() {
-        return totalPoints;
-    }
+    public Role getRole() { return role; }
+    public void setRole(Role role) { this.role = role; }
 
-    public void setTotalPoints(Integer totalPoints) {
-        this.totalPoints = totalPoints;
-    }
+    public Integer getTotalPoints() { return totalPoints; }
+    public void setTotalPoints(Integer totalPoints) { this.totalPoints = totalPoints; }
+
+    public String getCourse() { return course; }
+    public void setCourse(String course) { this.course = course; }
 }

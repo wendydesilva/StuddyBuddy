@@ -276,7 +276,7 @@
 
     <section id="select-subject">
         <option>Select Subject</option>
-        <option th:text="${coach.subjectExtertise}">Subject</option>
+        <option th:text="${coach.subjectExpertise}">Subject</option>
     </section>
 
     <a href="/logout" class="btn btn-default logout-btn">Logout</a>
@@ -290,7 +290,7 @@
 <div class="main-content">
     <!-- navigation bar -->
     <div class="menu-buttons">
-        <a th:href="@{/coach/home/{id}(id=${coach.id})}">Home</a>
+        <a th:href="@{/coach/home}">Home</a>
         <a th:href="@{/coach/goals/requests}" class="btn btn-primary">Goal Requests</a>
         <a th:href="@{/coach/goals/assigned}" class="btn btn-info">Assigned Goals</a>
         <a th:href="@{/coach/sessions}">Session</a>
@@ -326,12 +326,12 @@
         <div class="schedule-controller">
             <div class="schedule">
                 <h4>My Schedule</h4>
-                <div th:each="session : ${session}">
-                    <span class="sch-time" th:text="${session.sessionDateTime}">00:00</span>
-                    <span class="sch-subject" th:text="${session.subjectName}">Subject</span>
-                    <span class="sch-status" th:text="${session.status}">Status</span>
+                <div th:each="sess : ${sessions}">
+                    <span class="sch-time" th:text="${sess.sessionDateTime}">00:00</span>
+                    <span class="sch-subject" th:text="${sess.subjectName}">Subject</span>
+                    <span class="sch-status" th:text="${sess.status}">Status</span>
                 </div>
-                <p class="sch-empty" th:if="${#lists.isEmpty(session)}">There are no sessions scheduled</p>
+                <p class="sch-empty" th:if="${#lists.isEmpty(sessions)}">There are no sessions scheduled</p>
             </div>
 
             <div class="events">

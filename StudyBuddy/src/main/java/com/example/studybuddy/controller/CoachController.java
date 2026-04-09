@@ -4,8 +4,8 @@ import com.example.studybuddy.entity.Coach;
 import com.example.studybuddy.entity.Event;
 import com.example.studybuddy.model.Session;
 import com.example.studybuddy.service.CoachService;
-import com.example.studybuddy.service.StudentService;
-import com.example.studybuddy.session.CoachSession;
+//import com.example.studybuddy.service.StudentService;
+//import com.example.studybuddy.session.CoachSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +16,8 @@ import java.util.List;
 
 @Controller
 public class CoachController {
-    @Autowired
-    private StudentService studentService;
+//    @Autowired
+//    private StudentService studentService;
     @Autowired
     private CoachService coachService;
 
@@ -38,6 +38,6 @@ public class CoachController {
         model.addAttribute("totalStudents", totalStudents);
         model.addAttribute("generatedPay", generatedPay);
         model.addAttribute("totalHours", totalHours);
-        return "coach_home";
+        return "coach/home";
     }
 }

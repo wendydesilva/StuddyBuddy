@@ -40,7 +40,13 @@ public class StudentSessionController {
     @GetMapping
 
     public String viewSessions(Model model){
-        Student student = studentRepo.findAll().get(0);
+
+        List<Student> students = studentRepo.findAll();
+        if (students.isEmpty()){
+            model.addAttribute("error", "No students found");
+            return "student-sessions";
+        }
+        Student student = students.get(0);
         List<SessionPlan> plans = planRepo.findAll();
         Session currentSession = sessionRepo.findByStudentId(student.getId())
                 .stream()
@@ -99,9 +105,13 @@ public class StudentSessionController {
     @GetMapping("/payment")
     public String paymentPage(Model model) {
 
-        Student student = studentRepo.findAll().get(0);
-        model.addAttribute("student", student);
-
+        List<Student> students = studentRepo.findAll();
+        if (students.isEmpty()){
+            model.addAttribute("error", "No students found");
+            return "student-sessions";
+        }
+        Student student = students.get(0);
+        model.addAttribute("error", student);
         return "student-payment";
     }
 

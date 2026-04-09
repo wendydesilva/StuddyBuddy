@@ -28,6 +28,6 @@ public class StudentDashboardController {
         model.addAttribute("student", student);
         model.addAttribute("attendance", attendanceByStudent);
         model.addAttribute("timetable", timetableByStudent);
-        return "student_home";
+        return "student/home";
     }
 }

@@ -3,6 +3,7 @@ package com.example.studybuddy.controller;
 import com.example.studybuddy.entity.StudyGroup;
 import com.example.studybuddy.service.CoachService;
 import com.example.studybuddy.service.StudyGroupService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,13 +19,14 @@ public class StudyGroupController {
 
     // views joined groups and available groups as well
     @GetMapping("/{studentId}")
-    public String studyGroupPage(@PathVariable long studentId, Model model){
+    public String studyGroupPage(@PathVariable long studentId, Model model, HttpSession session) {
         List<StudyGroup> myGroup = studyGroupService.getGroupsByStudent(studentId);
         List<StudyGroup> allGroups = studyGroupService.getAllGroups();
+        model.addAttribute("student", session.getAttribute("loggedUser"));
         model.addAttribute("myGroups", myGroup);
         model.addAttribute("allGroups", allGroups);
         model.addAttribute("studentId", studentId);
-        return "study_group";
+        return "student/study-groups";
     }
 
     //creating a new group
@@ -38,6 +40,6 @@ public class StudyGroupController {
     @PostMapping("/{studentId}/join")
     public String joinGroup(@PathVariable long studentId, @RequestParam long groupId){
         studyGroupService.joinGroup(groupId, studentId);
-        return "redirect:/student/groups" + studentId;
+        return "redirect:/student/groups/" + studentId;
     }
 }

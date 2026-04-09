@@ -96,3 +96,6 @@ INSERT INTO users (name, email, password, role, total_points) VALUES ('Admin', '
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1365)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
 	at com.example.studybuddy.StudyBuddyApplication.main(StudyBuddyApplication.java:10)
+2026-04-09 08:54:32.130895-07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "STUDENT" not found; SQL statement:
+INSERT INTO STUDENT (full_name, email, course,dob) VALUES ('Student','wendy@example.com', 'BSc Computer Science','2026-03-18T15:30') [42102-240]

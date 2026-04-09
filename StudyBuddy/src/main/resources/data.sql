@@ -28,16 +28,19 @@ VALUES ('Admin', 'admin@test.com', 'pass123', 'ADMIN', 0);
 -- --                          CONSTRAINT fk_plan FOREIGN KEY (plan_id) REFERENCES SESSION_PLAN(id)
 -- );
 
+INSERT INTO STUDENT_SE (dtype, id, full_name, email, course,dob)
+VALUES ('Student', 1,'wendy@example.com','wendy@example.com', 'BSc Computer Science','2026-03-18T15:30');
+
 --INSERT INTO STUDENT_SE (dtype, id, name, email, course,dob)
 --VALUES ('Student',1, 'Wendy', 'wendy@example.com', 'BSc Computer Science','2026-03-18T15:30');
---INSERT INTO SESSION_PLAN (id, name, price, duration_minutes)
---VALUES (1, 'Basic', 0, 30),
---      (2, 'Standard', 20, 60),
---      (3, 'Premium', 30, 90);
+INSERT INTO SESSION_PLAN (id, name, price, duration_minutes)
+VALUES (1, 'Basic', 0, 30),
+     (2, 'Standard', 20, 60),
+     (3, 'Premium', 30, 90);
 
 
---INSERT INTO SESSION (session_time, status, student_id, subject,instructor)
---VALUES
---   ('2026-03-18 15:30:00', 'NEW', 1, 'Java','Jane'),
---    ('2026-03-19 10:00:00', 'NEW', 1, 'C#','Shane'),
---   ('2026-03-20 11:00:00', 'NEW', 1, 'Data Structures','George');
+INSERT INTO SESSION (session_time, status, student_id, subject,instructor)
+VALUES
+  ('2026-03-18 15:30:00', 'NEW', 1, 'Java','Jane'),
+   ('2026-03-19 10:00:00', 'NEW', 1, 'C#','Shane'),
+  ('2026-03-20 11:00:00', 'NEW', 1, 'Data Structures','George');

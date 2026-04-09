@@ -247,7 +247,8 @@
 
         <a href="/student/goals" class="btn btn-primary">View Goals</a>
         <a th:href="@{/student/sessions}">Session</a>
-        <a href="#" class="active">Study Groups</a>
+<!--        <a th:href="@{/student/groups/{id}(id=${student.userId})}">Study Groups</a>-->
+        <a th:href="@{/student/groups/1}">Study Groups</a>
         <a href="/student/tasks" class="btn btn-info">My Tasks</a>
         <a href="/student/rewards" class="btn btn-warning">View Rewards</a>
         <a href="/student/prizes" class="btn btn-success">My Prizes</a>
